@@ -34,3 +34,39 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Admin Portal (Users)
+
+This repository includes a minimal admin portal with client-side authentication and users management:
+
+- Pages: `/login` and `/users` under `app/`
+- Client-side token storage via `sessionStorage`
+- API modules in `src/api/administration`
+- UI components in `src/components`
+- Tailwind CSS styling, dark/light aware
+
+### Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Configure API base URL in `.env.local` (already created):
+
+```env
+NEXT_PUBLIC_API_URI=http://localhost:8080/api
+```
+
+3. Start the dev server:
+
+```bash
+npm run dev
+```
+
+### Notes
+
+- The login request posts to `${NEXT_PUBLIC_API_URI}/auth/login` and expects a JSON response containing `token` (or `accessToken`). On success, the token is saved to `sessionStorage`.
+- All authenticated API calls attach `Authorization: Bearer ${sessionStorage.getItem('token')}`.
+- The users page uses `searchUsers(searchBy, searchValue, page, sortType, sortOrder)` and expects a response with `users` (or `content`/`items`) and optionally `totalPages`.
