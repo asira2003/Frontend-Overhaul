@@ -1,0 +1,524 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+.login-container {
+  min-height: 100vh !important;
+  display: flex;
+  background-color: rgb(241, 244, 255);
+  justify-content: center;
+  align-items: center;
+}
+
+.login-wrapper {
+  width: 500px;
+  background-color: white;
+  border-radius: 1rem;
+  align-content: center;
+  padding: 3rem 2rem;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.226);
+}
+
+.login-wrapper h1 {
+  font-size: 2rem;
+  text-align: center;
+  color: rgb(16, 64, 115);
+}
+
+.login-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.login-img img {
+  width: 8rem;
+}
+
+.login-input,
+.backup-email {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin-top: 20px;
+  margin-bottom: 7px;
+  background-color: rgb(241, 244, 255);
+  border: 2px rgba(16, 64, 115, 0.274) solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+}
+
+.login-input input,
+.backup-email input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 2px rgb(16, 64, 115) solid;
+  font-size: 1rem;
+  border-radius: 2rem;
+  color: #565656;
+  padding: 20px 45px 20px 20px;
+}
+
+.login-input input :focus,
+.backup-email input :focus {
+  background-color: white !important;
+  box-shadow: none !important;
+  border: 2px rgb(16, 64, 115) solid;
+}
+
+.forgot-password-btn button:hover {
+  color: #000 !important;
+}
+
+.wrong-pass {
+  border: 2px solid rgb(192, 1, 1) !important;
+}
+
+.wrong-pass i {
+  color: rgb(192, 1, 1) !important;
+}
+
+.wrong-pass::placeholder {
+  color: rgb(192, 1, 1) !important;
+}
+
+.input-box input::placeholder {
+  color: #000;
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+
+  top: 26%;
+  transform: translate(-40%);
+  font-size: 20px;
+  color: #000;
+}
+
+.forgot {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 1rem !important;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+  text-decoration-color: #dcb237;
+}
+
+.forgot {
+  background: transparent !important;
+  border: none !important;
+}
+
+.forgot:hover {
+  text-decoration: underline;
+  text-decoration-color: #000;
+}
+
+.forgot-password-btn button {
+  color: #000;
+}
+
+.btn-log {
+  margin-top: 1.5rem !important;
+  width: 100%;
+  height: 40px;
+  background-color: rgb(38, 100, 166);
+  border-radius: 2rem;
+  outline: none;
+  border-color: transparent !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 700;
+  transition: 0.5s ease;
+  margin: 20px auto 0;
+  display: block;
+  text-align: center;
+}
+
+.btn-log:hover {
+  background-color: rgb(22, 57, 94);
+}
+
+.btn-reset {
+  margin-top: 1rem !important;
+  width: 100%;
+  height: 40px;
+  background-color: rgb(12, 43, 77);
+  border-radius: 2rem;
+  outline: none;
+  border-color: transparent !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 700;
+  transition: 0.5s ease;
+  margin: 20px auto 0;
+  display: block;
+  text-align: center;
+}
+
+button {
+  margin-top: 0 !important;
+}
+
+.btn-reset:hover {
+  background: #000;
+}
+
+footer {
+  background: transparent !important;
+  padding: 0 !important;
+  z-index: 100000 !important;
+}
+
+.footerBottom {
+  margin: 0 !important;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  padding: 2rem;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  z-index: 1001;
+}
+
+.popup h2 {
+  margin-top: 0;
+}
+
+.popup button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.popup button:hover {
+  background: #0056b3;
+}
+
+.nav-secondary a {
+  text-shadow: none !important;
+}
+
+.main-secondary a {
+  text-shadow: none !important;
+}
+
+.login-input input,
+.backup-email input {
+  font-weight: 700;
+  border: none;
+}
+
+.login-input input::placeholder,
+.backup-email input::placeholder {
+  color: #4a4a4a;
+  font-weight: 500;
+}
+
+.btn-log {
+  border-color: black;
+}
+
+.dashboard-mobile {
+  position: absolute;
+  left: 2rem;
+}
+
+.ham-icon {
+  font-size: 1.3rem;
+  box-shadow: 0 0 10px #a07905;
+  background-color: white;
+  padding: 10px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-radius: 30px;
+  margin-bottom: 1rem;
+}
+
+.sidebar {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.319);
+  min-width: 45vw;
+  z-index: 1001 !important;
+}
+
+.sidebar-navlinks {
+  text-decoration: none !important;
+  color: black;
+  font-size: 1.2rem;
+}
+
+.content-mobile {
+  margin-top: 6rem !important;
+}
+
+.dashboard-mobile {
+  z-index: 1100; /* Ensure this stays above both the overlay and sidebar */
+  display: none;
+}
+
+.sidebar-items {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.sidebar-items.activated {
+  background-color: #e0b430;
+}
+
+.sidebar-items.activated .sidebar-navlinks {
+  color: white;
+}
+
+.sidebar ul {
+  padding-left: 0;
+}
+
+.ham-icon {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ham-icon.active {
+  background-color: #a07905; /* Change this to the desired background color */
+  color: white;
+}
+
+.dashboard-sidebar {
+  width: 18rem;
+}
+
+.registration-file-heading {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.file-container {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.dropzone {
+  /* margin-top: 0.5rem; */
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Hover effect */
+.dropzone:hover {
+  border-color: #999;
+  background-color: #f3f3f3;
+}
+
+/* When dragging a valid file */
+.dropzone-active {
+  border-color: #007bff;
+  background-color: #eaf4ff;
+  color: #0056b3;
+}
+
+/* When dragging an invalid file */
+.dropzone-reject {
+  border-color: #dc3545;
+  background-color: #ffe6e6;
+  color: #dc3545;
+}
+
+/* When a file is uploaded successfully */
+.dropzone-success {
+  border-color: #28a745;
+  background-color: #f0fff4;
+  color: #155724;
+}
+
+/* Text inside the box */
+.dropzone p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Uploaded file list */
+.uploaded-file-list {
+  margin-top: 10px;
+  text-align: left;
+  display: inline-block;
+  border-radius: 8px;
+  padding: 10px 15px;
+  color: #333;
+}
+
+/* Individual file item */
+.uploaded-file-list div {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.uploaded-file-list div strong {
+  color: #007bff;
+}
+
+/* Error text */
+.text-red-600 {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Subtle hint text (e.g., "Drag & drop again...") */
+.text-gray-500 {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/*  */
+
+.register-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0.5rem 0;
+  background-color: rgb(222, 233, 255);
+  padding: 1rem 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.register-checkbox.agent-status {
+  background-color: rgb(241, 244, 255);
+  margin-top: 0.5rem;
+}
+
+/* Label text */
+.register-label-checkbox {
+  font-size: 1.1rem;
+  color: #002a9e;
+  font-weight: 500;
+}
+
+/* Switch container */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+/* Hide default checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+/* The circle inside */
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Checked (on) state */
+.switch input:checked + .slider {
+  background-color: #002a9e;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* Disabled state */
+.switch input:disabled + .slider {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.switch input:disabled + .slider::before {
+  background-color: #f7f7f7;
+  box-shadow: none;
+}
+
+/* Focus outline (accessibility) */
+.switch input:focus + .slider {
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.3);
+}
+
+.space-maker {
+  height: 10rem;
+  background-color: rgb(241, 244, 255);
+}
+
+.space-maker.bottom {
+  height: 6rem;
+  background-color: rgb(241, 244, 255);
+}
+
+.register-form-input.dropzone-container {
+  margin-bottom: 0.5rem;
+}
