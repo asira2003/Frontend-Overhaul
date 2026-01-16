@@ -90,7 +90,19 @@ export default function Login() {
 
   return (
     <>
-      <div className="login-body">
+      <div className="login-container">
+        <div className="login-left"></div>
+        <div className="login-right">
+          <div className="login-form-container">
+            <div className="login-form-header">
+              <h2>Welcome Back</h2>
+              <p>Enter your credentials to access the admin console</p>
+            </div>
+            <div className="login-form"></div>
+          </div>
+        </div>
+      </div>
+      {/* <div className="login-body">
         <a href="#" className="whatsapp">
           <i className="fa-brands fa-whatsapp"></i>
         </a>
@@ -208,7 +220,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="toast-container toast-positioner">{toasts}</div>
+      <div className="toast-container toast-positioner">{toasts}</div> */}
     </>
   );
 }
