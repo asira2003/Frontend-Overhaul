@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
 import bg from "../assets/images/login/back-3.jpg";
+import "../styles/admin-login.css";
 import { login, requireAuth } from "../api/administration/authenticationApi";
 import { validateInputTextNoUpperCase } from "../utils/StringUtils";
 import ServerMessageToast from "../components/ServerMessageToast";
@@ -73,6 +74,7 @@ export default function Login() {
     password: "",
     resetPasswordemail: "",
   });
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   useEffect(() => {
     setToasts((prevToasts) => {
@@ -90,102 +92,137 @@ export default function Login() {
 
   return (
     <>
-      <div className="login-body">
-        <a href="#" className="whatsapp">
-          <i className="fa-brands fa-whatsapp"></i>
-        </a>
-        <div className="login-container">
-          {" "}
-          <div className="login-wrapper">
-            <div className="login-img">
-              <img src="/logo.png" alt="" />
-            </div>
-            <div className="login-top">
-              <h1>Sign In</h1>
-              <h2>Admin Console</h2>
+      <div className="admin-login-page">
+        <div className="admin-login-bg" aria-hidden="true" />
+        <div className="admin-login-wrapper">
+          <div
+            className="admin-login-card"
+            role="main"
+            aria-labelledby="admin-title"
+          >
+            <div className="admin-login-header">
+              <div className="shield-icon" aria-hidden="true">
+                <i className="bx bxs-shield" />
+              </div>
+              <h1 id="admin-title" className="admin-title">
+                Admin Console
+              </h1>
+              <p className="admin-sub">Sign in to access your dashboard</p>
             </div>
 
-            <Form method="post">
-              <div className="input-box login-input ">
-                <input
-                  type="text"
-                  className={`form-control input-group-control-mod-2 form-input-mod ${
-                    usernameError && usernameError.length > 0
-                      ? "wrong-pass"
-                      : ""
+            <Form
+              method="post"
+              className="admin-form"
+              aria-describedby="server-message"
+            >
+              <div className="field">
+                <label htmlFor="username" className="field-label">
+                  Email Address
+                </label>
+                <div
+                  className={`input-with-icon ${
+                    usernameError && usernameError.length > 0 ? "has-error" : ""
                   }`}
-                  id="username"
-                  name="username"
-                  placeholder="Email"
-                  disabled={navigation.state === "submitting" ? true : false}
-                  value={modal.username}
-                  onChange={(event) => {
-                    setModal((prevModal) => {
-                      return {
+                >
+                  <i className="bx bx-envelope" aria-hidden="true"></i>
+                  <input
+                    type="email"
+                    id="username"
+                    name="username"
+                    className="field-input"
+                    placeholder="admin@example.com"
+                    disabled={navigation.state === "submitting"}
+                    value={modal.username}
+                    onChange={(event) => {
+                      setModal((prevModal) => ({
                         ...prevModal,
                         username: validateInputTextNoUpperCase(
                           event.target.value
                         ),
-                      };
-                    });
-                  }}
-                  required
-                />
-                <i
-                  className={`bx bxs-user ${
-                    usernameError && usernameError.length > 0
-                      ? "text-danger"
-                      : ""
-                  }`}
-                ></i>
+                      }));
+                    }}
+                    aria-invalid={usernameError && usernameError.length > 0}
+                    aria-describedby={
+                      usernameError && usernameError.length > 0
+                        ? "username-error"
+                        : ""
+                    }
+                    required
+                  />
+                </div>
+                {usernameError && usernameError.length > 0 && (
+                  <div id="username-error" className="field-error">
+                    {usernameError[0].message}
+                  </div>
+                )}
               </div>
-              {usernameError && usernameError.length > 0 && (
-                <div className="text-danger">{usernameError[0].message}</div>
-              )}
-              <div className="input-box login-input ">
-                <input
-                  type="password"
-                  className={`form-control input-group-control-mod-2 form-input-mod ${
-                    passwordError && passwordError.length > 0
-                      ? "wrong-pass"
-                      : ""
+
+              <div className="field">
+                <div className="field-row">
+                  <label htmlFor="password" className="field-label">
+                    Password
+                  </label>
+                  <a href="#" className="forgot-link">
+                    Forgot password?
+                  </a>
+                </div>
+                <div
+                  className={`input-with-icon ${
+                    passwordError && passwordError.length > 0 ? "has-error" : ""
                   }`}
-                  id="password"
-                  name="password"
-                  placeholder="Password"
-                  disabled={navigation.state === "submitting" ? true : false}
-                  value={modal.password}
-                  onChange={(event) => {
-                    setModal((prevModal) => {
-                      return {
+                >
+                  <i className="bx bx-lock-alt" aria-hidden="true"></i>
+                  <input
+                    type={passwordVisible ? "text" : "password"}
+                    id="password"
+                    name="password"
+                    className="field-input"
+                    placeholder="Password"
+                    disabled={navigation.state === "submitting"}
+                    value={modal.password}
+                    onChange={(event) => {
+                      setModal((prevModal) => ({
                         ...prevModal,
                         password: validateInputTextNoUpperCase(
                           event.target.value
                         ),
-                      };
-                    });
-                  }}
-                />
-                <i
-                  className={`bx bxs-lock-alt ${
-                    passwordError && passwordError.length > 0
-                      ? "text-danger"
-                      : ""
-                  }`}
-                ></i>
-              </div>
-              {passwordError && passwordError.length > 0 && (
-                <div className="text-danger">
-                  {
-                    response?.errors.filter((o) => o.name === "password")[0]
-                      .message
-                  }
+                      }));
+                    }}
+                    aria-invalid={passwordError && passwordError.length > 0}
+                    aria-describedby={
+                      passwordError && passwordError.length > 0
+                        ? "password-error"
+                        : ""
+                    }
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => setPasswordVisible((v) => !v)}
+                    aria-label={
+                      passwordVisible ? "Hide password" : "Show password"
+                    }
+                  >
+                    <i
+                      className={passwordVisible ? "bx bx-show" : "bx bx-hide"}
+                      aria-hidden="true"
+                    ></i>
+                  </button>
                 </div>
-              )}
+                {passwordError && passwordError.length > 0 && (
+                  <div id="password-error" className="field-error">
+                    {
+                      response?.errors.filter((o) => o.name === "password")[0]
+                        .message
+                    }
+                  </div>
+                )}
+              </div>
 
               <button
                 type={navigation.state === "submitting" ? "button" : "submit"}
-                className="btn-log"
+                className="cta-button"
                 disabled={
                   navigation.state === "submitting" &&
                   navigation.formData.get("formType") === "login"
@@ -198,17 +235,22 @@ export default function Login() {
                   ? "Submitting..."
                   : "Sign In"}
               </button>
-              <input
-                type="hidden"
-                name="formType"
-                value="login"
-                readOnly={true}
-              />
+
+              <input type="hidden" name="formType" value="login" readOnly />
             </Form>
+
+            <div className="divider">
+              <span>SECURE ACCESS</span>
+            </div>
+            <p className="protected-note">
+              Protected by enterprise-grade security
+            </p>
           </div>
         </div>
       </div>
-      <div className="toast-container toast-positioner">{toasts}</div>
+      <div className="toast-container toast-positioner" id="server-message">
+        {toasts}
+      </div>
     </>
   );
 }

@@ -52,33 +52,6 @@ export default function SideNavbar({ activeModuleParam, activeFeatureParam }) {
             </div>
             <div className="row justify-content-center">
               <div className="col align-self-center">
-                <div
-                  className={`list-group-item side-nav-item-border-modifer list-group-item-action ${
-                    activeFeature === "overview"
-                      ? "side-navigation-item-active"
-                      : "side-navigation-item"
-                  } side-nav-border-bottom  overview-btn`}
-                >
-                  <div className="row">
-                    <div className="col text-truncate">
-                      <Link
-                        to="/"
-                        className="stretched-link link-text-modifer"
-                        onClick={() => {
-                          toggleNavState("overview", "overview");
-                          toggleSideNav();
-                        }}
-                      >
-                        <i className="fa-solid fa-home"></i>
-                        &nbsp;&nbsp;Overview
-                      </Link>
-                    </div>
-                    <div className="col col-3 text-end">
-                      <i className="fa-sharp fa-solid fa-caret-right"></i>
-                    </div>
-                  </div>
-                </div>
-
                 {isAdministrationVisible && (
                   <div className="accordion-item accordion accordion-flush ">
                     <div className="accordion-header" id="sideNavAccordionHead">

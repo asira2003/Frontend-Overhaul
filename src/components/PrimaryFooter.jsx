@@ -5,7 +5,7 @@ export default function PrimaryFooter() {
     <footer className="footer">
       <div className="footerBottom footer-end-details">
         <p>
-          <a href="https://www.rushmore.lk" target="_blank">
+          <a href="https://www.rushmore.lk" target="_blank" rel="noreferrer">
             A Solution By Rushmore Systems (Pvt) Ltd
           </a>
         </p>

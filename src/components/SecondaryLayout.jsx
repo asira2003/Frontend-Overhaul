@@ -30,7 +30,7 @@ export default function SecondaryLayout() {
   const loaderData = useLoaderData();
   const navigation = useNavigation();
   const activeModule =
-    loaderData.pathname === "/users" ||
+    loaderData.pathname === "/" ||
     loaderData.pathname === "/usergroups" ||
     /\/privileges/.test(loaderData.pathname)
       ? "administration"
@@ -40,7 +40,7 @@ export default function SecondaryLayout() {
       ? "overview"
       : "";
   const activeFeature =
-    loaderData.pathname === "/users"
+    loaderData.pathname === "/"
       ? "users"
       : loaderData.pathname === "/usergroups" ||
         /\/privileges/.test(loaderData.pathname)
