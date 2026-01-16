@@ -1,4 +1,3 @@
-// src/api/administration/authenticationApi.js
 import { API_URI } from "../apiConfig";
 
 export async function requireAuth() {
@@ -8,16 +7,13 @@ export async function requireAuth() {
     headers: headers,
   });
 
-  try {
-    const data = await response.json();
-    return data;
-  } catch (e) {
-    return { loggedIn: false };
-  }
+  const data = await response.json();
+  return data;
+
+  // return { loggedIn: false };
 }
 
 export async function login(username, password) {
-  // Mirror legacy: multipart/form-data with FormData
   const headers = new Headers().append("Content-Type", "multipart/form-data");
   const formData = new FormData();
   formData.append("username", username);
@@ -32,5 +28,5 @@ export async function login(username, password) {
 
 export function logout(navigate) {
   sessionStorage.clear();
-  if (navigate) return navigate("/login");
+  return navigate("/login");
 }
