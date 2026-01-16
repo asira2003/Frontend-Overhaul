@@ -5,6 +5,7 @@ import bg from "../assets/images/login/back-3.jpg";
 import { login, requireAuth } from "../api/administration/authenticationApi";
 import { validateInputTextNoUpperCase } from "../utils/StringUtils";
 import ServerMessageToast from "../components/ServerMessageToast";
+import { Lock, Mail, Eye, EyeOff } from "lucide-react";
 
 export async function loader() {
   const { message } = await requireAuth();
@@ -63,9 +64,13 @@ export async function action({ request }) {
 
 export default function Login() {
   const response = useActionData();
-  const usernameError = response?.errors.filter((o) => o.name === "email");
-  const passwordError = response?.errors.filter((o) => o.name === "password");
   const navigation = useNavigation();
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  const usernameError = validationErrors.filter((o) => o.name === "email");
+  const passwordError = validationErrors.filter((o) => o.name === "password");
+
+  const [showPassword, setShowPassword] = useState(false);
   const [toasts, setToasts] = useState([]);
 
   const [modal, setModal] = useState({
@@ -73,20 +78,30 @@ export default function Login() {
     password: "",
     resetPasswordemail: "",
   });
-
   useEffect(() => {
+    if (response?.errors) {
+      setValidationErrors(response.errors);
+    }
+
     setToasts((prevToasts) => {
       const newToasts = prevToasts.map((x) => x);
-      newToasts.unshift(
-        <ServerMessageToast
-          key={prevToasts.length + 1}
-          message={response?.message}
-          id={prevToasts.length + 1}
-        />
-      );
+      if (response?.message) {
+        newToasts.unshift(
+          <ServerMessageToast
+            key={prevToasts.length + 1}
+            message={response?.message}
+            id={prevToasts.length + 1}
+          />
+        );
+      }
       return newToasts;
     });
   }, [response]);
+
+  // Helper to clear specific error
+  const clearError = (fieldName) => {
+    setValidationErrors((prev) => prev.filter((err) => err.name !== fieldName));
+  };
 
   return (
     <>
@@ -98,129 +113,141 @@ export default function Login() {
               <h2>Welcome Back</h2>
               <p>Enter your credentials to access the admin console</p>
             </div>
-            <div className="login-form"></div>
-          </div>
-        </div>
-      </div>
-      {/* <div className="login-body">
-        <a href="#" className="whatsapp">
-          <i className="fa-brands fa-whatsapp"></i>
-        </a>
-        <div className="login-container">
-          {" "}
-          <div className="login-wrapper">
-            <div className="login-img">
-              <img src="/logo.png" alt="" />
-            </div>
-            <div className="login-top">
-              <h1>Sign In</h1>
-              <h2>Admin Console</h2>
-            </div>
+            <div className="login-form-wrapper">
+              <Form className="login-form" method="post">
+                <div className="login-form-input-container">
+                  <label htmlFor="username">Email Address</label>
+                  <div
+                    className={`login-form-input-box ${
+                      usernameError && usernameError.length > 0
+                        ? "has-error"
+                        : ""
+                    }`}
+                  >
+                    <Mail className="input-icon" />
+                    <input
+                      id="username"
+                      name="username"
+                      placeholder="admin@example.com"
+                      disabled={
+                        navigation.state === "submitting" ? true : false
+                      }
+                      value={modal.username}
+                      onChange={(event) => {
+                        if (usernameError.length > 0) clearError("email");
 
-            <Form method="post">
-              <div className="input-box login-input ">
-                <input
-                  type="text"
-                  className={`form-control input-group-control-mod-2 form-input-mod ${
-                    usernameError && usernameError.length > 0
-                      ? "wrong-pass"
-                      : ""
-                  }`}
-                  id="username"
-                  name="username"
-                  placeholder="Email"
-                  disabled={navigation.state === "submitting" ? true : false}
-                  value={modal.username}
-                  onChange={(event) => {
-                    setModal((prevModal) => {
-                      return {
-                        ...prevModal,
-                        username: validateInputTextNoUpperCase(
-                          event.target.value
-                        ),
-                      };
-                    });
-                  }}
-                  required
-                />
-                <i
-                  className={`bx bxs-user ${
-                    usernameError && usernameError.length > 0
-                      ? "text-danger"
-                      : ""
-                  }`}
-                ></i>
-              </div>
-              {usernameError && usernameError.length > 0 && (
-                <div className="text-danger">{usernameError[0].message}</div>
-              )}
-              <div className="input-box login-input ">
-                <input
-                  type="password"
-                  className={`form-control input-group-control-mod-2 form-input-mod ${
-                    passwordError && passwordError.length > 0
-                      ? "wrong-pass"
-                      : ""
-                  }`}
-                  id="password"
-                  name="password"
-                  placeholder="Password"
-                  disabled={navigation.state === "submitting" ? true : false}
-                  value={modal.password}
-                  onChange={(event) => {
-                    setModal((prevModal) => {
-                      return {
-                        ...prevModal,
-                        password: validateInputTextNoUpperCase(
-                          event.target.value
-                        ),
-                      };
-                    });
-                  }}
-                />
-                <i
-                  className={`bx bxs-lock-alt ${
-                    passwordError && passwordError.length > 0
-                      ? "text-danger"
-                      : ""
-                  }`}
-                ></i>
-              </div>
-              {passwordError && passwordError.length > 0 && (
-                <div className="text-danger">
-                  {
-                    response?.errors.filter((o) => o.name === "password")[0]
-                      .message
-                  }
+                        setModal((prevModal) => {
+                          return {
+                            ...prevModal,
+                            username: validateInputTextNoUpperCase(
+                              event.target.value
+                            ),
+                          };
+                        });
+                      }}
+                      className={`login-form-input-box-input ${
+                        usernameError && usernameError.length > 0
+                          ? "input-error"
+                          : ""
+                      }`}
+                      required
+                    />
+                  </div>
+                  <div className="error-text-form">
+                    {usernameError?.[0]?.message || ""}
+                  </div>
                 </div>
-              )}
 
-              <button
-                type={navigation.state === "submitting" ? "button" : "submit"}
-                className="btn-log"
-                disabled={
-                  navigation.state === "submitting" &&
-                  navigation.formData.get("formType") === "login"
-                    ? true
-                    : false
-                }
-              >
-                {navigation.state === "submitting" &&
-                navigation.formData.get("formType") === "login"
-                  ? "Submitting..."
-                  : "Sign In"}
-              </button>
-              <input
-                type="hidden"
-                name="formType"
-                value="login"
-                readOnly={true}
-              />
-            </Form>
+                <div className="login-form-input-container">
+                  <label htmlFor="password">Password</label>
+                  <div
+                    className={`login-form-input-box ${
+                      passwordError && passwordError.length > 0
+                        ? "has-error"
+                        : ""
+                    }`}
+                  >
+                    <Lock className="input-icon" />
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      disabled={
+                        navigation.state === "submitting" ? true : false
+                      }
+                      value={modal.password}
+                      onChange={(event) => {
+                        if (passwordError.length > 0) clearError("password");
+
+                        setModal((prevModal) => {
+                          return {
+                            ...prevModal,
+                            password: validateInputTextNoUpperCase(
+                              event.target.value
+                            ),
+                          };
+                        });
+                      }}
+                      className={`login-form-input-box-input ${
+                        passwordError && passwordError.length > 0
+                          ? "input-error"
+                          : ""
+                      }`}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="eye-icon"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="size-5" />
+                      ) : (
+                        <Eye className="size-5" />
+                      )}
+                    </button>
+                  </div>
+                  <div className="error-text-form">
+                    {passwordError?.[0]?.message || ""}
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="login-form-submit">
+                  <button
+                    type={
+                      navigation.state === "submitting" ? "button" : "submit"
+                    }
+                    className="login-form-submit-button"
+                    disabled={
+                      navigation.state === "submitting" &&
+                      navigation.formData.get("formType") === "login"
+                    }
+                  >
+                    {navigation.state === "submitting" &&
+                    navigation.formData.get("formType") === "login" ? (
+                      <span className="button-loading">
+                        <span className="spinner"></span>
+                        <span>Signing in...</span>
+                      </span>
+                    ) : (
+                      "Sign In"
+                    )}
+                  </button>
+                </div>
+                <input
+                  type="hidden"
+                  name="formType"
+                  value="login"
+                  readOnly={true}
+                />
+              </Form>
+            </div>
           </div>
         </div>
       </div>
-      <div className="toast-container toast-positioner">{toasts}</div> */}
+      <div className="toast-wrapper">{toasts}</div>
     </>
   );
 }
