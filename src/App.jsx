@@ -30,30 +30,6 @@ import Settings, {
   loader as SettingsLoader,
   action as SettingsAction,
 } from "./pages/Administration/Settings";
-import Customers, {
-  loader as CustomersLoader,
-  action as CustomersAction,
-} from "./pages/Invoicing/Customers";
-import TourInvoices, {
-  loader as TourInvoicesLoader,
-  action as TourInvoicesAction,
-} from "./pages/Invoicing/TourInvoices";
-import Agents, {
-  loader as AgentsLoader,
-  action as AgentsAction,
-} from "./pages/Administration/Agents";
-import AgentInvoices, {
-  loader as AgentInvoicesLoader,
-  action as AgentInvoicesAction,
-} from "./pages/Invoicing/AgentInvoices";
-import CustomerInquiries, {
-  loader as CustomerInquiriesLoader,
-  action as CustomerInquiriesAction,
-} from "./pages/Inquiries/CustomerInquiries";
-import AgentInquiries, {
-  loader as AgentInquiriesLoader,
-  action as AgentInquiriesAction,
-} from "./pages/Inquiries/AgentInquiries";
 import Error from "./pages/Error";
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -84,42 +60,6 @@ const router = createBrowserRouter(
           element={<Settings />}
           loader={SettingsLoader}
           action={SettingsAction}
-        />
-        <Route
-          path="tourinvoices"
-          element={<TourInvoices />}
-          loader={TourInvoicesLoader}
-          action={TourInvoicesAction}
-        />
-        <Route
-          path="customers"
-          element={<Customers />}
-          loader={CustomersLoader}
-          action={CustomersAction}
-        />
-        <Route
-          path="agents"
-          element={<Agents />}
-          loader={AgentsLoader}
-          action={AgentsAction}
-        />
-        <Route
-          path="agentinvoices"
-          element={<AgentInvoices />}
-          loader={AgentInvoicesLoader}
-          action={AgentInvoicesAction}
-        />
-        <Route
-          path="customerinquiries"
-          element={<CustomerInquiries />}
-          loader={CustomerInquiriesLoader}
-          action={CustomerInquiriesAction}
-        />
-        <Route
-          path="agentinquiries"
-          element={<AgentInquiries />}
-          loader={AgentInquiriesLoader}
-          action={AgentInquiriesAction}
         />
       </Route>
       <Route element={<PrimaryLayout />}>

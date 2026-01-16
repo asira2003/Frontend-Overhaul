@@ -68,21 +68,6 @@ export default function Login() {
   const navigation = useNavigation();
   const [toasts, setToasts] = useState([]);
 
-  // useEffect(() => {
-  //   const fpBtn = document.getElementById("forgot-password-btn");
-  //   function toggleResetTextWeight() {
-  //     if (fpBtn.classList.contains("opened")) {
-  //       fpBtn.classList.remove("opened");
-  //     } else {
-  //       fpBtn.classList.add("opened");
-  //     }
-  //   }
-  //   fpBtn.addEventListener("click", toggleResetTextWeight);
-  //   return () => {
-  //     fpBtn.removeEventListener("click", toggleResetTextWeight);
-  //   };
-  // }, []);
-
   const [modal, setModal] = useState({
     username: "",
     password: "",
@@ -220,97 +205,6 @@ export default function Login() {
                 readOnly={true}
               />
             </Form>
-            {/* <div className="row form-row justify-content-center">
-              <div className="col">
-                <div
-                  className="forgot-password-btn d-grid"
-                  id="forgot-password-btn"
-                >
-                  <button
-                    className="forgot"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#forgotPasswordForm"
-                    aria-expanded="false"
-                    aria-controls="forgotPasswordForm"
-                  >
-                    Forgot Password
-                  </button>
-                </div>
-                <div className="collapse" id="forgotPasswordForm">
-                  <Form method="post" className="login-form-2 rounded">
-                    <div className="input-box">
-                      <input
-                        type="text"
-                        className={`form-control input-group-control-mod-2 form-input-mod ${
-                          usernameError && usernameError.length > 0
-                            ? "is-invalid border-danger"
-                            : ""
-                        }`}
-                        id="resetemail"
-                        name="resetemail"
-                        placeholder="Email"
-                        disabled={
-                          navigation.state === "submitting" ? true : false
-                        }
-                        value={modal.resetPasswordemail}
-                        onChange={(event) => {
-                          setModal((prevModal) => {
-                            return {
-                              ...prevModal,
-                              resetPasswordemail: validateInputTextNoUpperCase(
-                                event.target.value
-                              ),
-                            };
-                          });
-                        }}
-                        required
-                      />
-                      <i
-                        className={`bx bxs-user ${
-                          usernameError && usernameError.length > 0
-                            ? "text-danger"
-                            : ""
-                        }`}
-                      ></i>
-                    </div>
-
-                    <div className="login-btn d-grid">
-                      <button
-                        type={
-                          navigation.state === "submitting"
-                            ? "button"
-                            : "submit"
-                        }
-                        className="btn-reset"
-                        disabled={
-                          navigation.state === "submitting" &&
-                          navigation.formData.get("formType") ===
-                            "resetPassword"
-                            ? true
-                            : false
-                        }
-                      >
-                        {navigation.state === "submitting" &&
-                        navigation.formData.get("formType") === "resetPassword"
-                          ? "Submitting..."
-                          : "Reset Your Password"}
-                      </button>
-                    </div>
-                    <input
-                      type="hidden"
-                      name="formType"
-                      value="resetPassword"
-                      readOnly={true}
-                    />
-                    <div className="form-text text-center pt-3">
-                      A new password will be created and sent to your
-                      <strong> registered email</strong>.
-                    </div>
-                  </Form>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>

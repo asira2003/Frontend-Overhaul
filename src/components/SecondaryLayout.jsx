@@ -32,18 +32,10 @@ export default function SecondaryLayout() {
   const activeModule =
     loaderData.pathname === "/users" ||
     loaderData.pathname === "/usergroups" ||
-    loaderData.pathname === "/customers" ||
-    loaderData.pathname === "/agents" ||
     /\/privileges/.test(loaderData.pathname)
       ? "administration"
       : loaderData.pathname === "/settings"
       ? "settings"
-      : loaderData.pathname === "/tourinvoices" ||
-        loaderData.pathname === "/agentinvoices"
-      ? "invoicing"
-      : loaderData.pathname === "/customerinquiries" ||
-        loaderData.pathname === "/agentinquiries"
-      ? "inquiries"
       : loaderData.pathname === "/"
       ? "overview"
       : "";
@@ -55,18 +47,6 @@ export default function SecondaryLayout() {
       ? "usergroups"
       : loaderData.pathname === "/settings"
       ? "settings"
-      : loaderData.pathname === "/tourinvoices"
-      ? "tourinvoices"
-      : loaderData.pathname === "/agentinvoices"
-      ? "agentinvoices"
-      : loaderData.pathname === "/customers"
-      ? "customers"
-      : loaderData.pathname === "/agents"
-      ? "agents"
-      : loaderData.pathname === "/customerinquiries"
-      ? "customerinquiries"
-      : loaderData.pathname === "/agentinquiries"
-      ? "agentinquiries"
       : loaderData.pathname === "/"
       ? "overview"
       : "";
