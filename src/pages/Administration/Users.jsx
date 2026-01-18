@@ -28,6 +28,7 @@ import { pushToast } from "../../utils/ToastBus";
 import ViewUserDialog from "../../components/ViewUserDialog";
 import AddUserDialog from "../../components/AddUserDialog";
 import DeleteUserDialog from "../../components/DeleteUserDialog";
+import EditUserDialog from "../../components/EditUserDialog";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -314,6 +315,7 @@ export default function Users() {
   }
 
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   return (
     <>
       <Suspense fallback={<ContentThrobber />}>
@@ -371,7 +373,10 @@ export default function Users() {
                                 data-bs-target="#editUserModal"
                                 disabled={!user.authorities.edit}
                                 value={user.userId}
-                                onClick={() => loadModalData(user.userId)}
+                                onClick={() => {
+                                  loadModalData(user.userId);
+                                  setIsEditOpen(true);
+                                }}
                               >
                                 <i className="fa-solid fa-pen"></i>
                               </button>
@@ -493,9 +498,6 @@ export default function Users() {
                                       <option value="userEmail">Email</option>
                                       <option value="fullName">
                                         Full Name
-                                      </option>
-                                      <option value="userGroups">
-                                        User Group
                                       </option>
                                     </select>
                                   </div>
@@ -823,6 +825,19 @@ export default function Users() {
                             <AddUserDialog
                               isOpen={isAddOpen}
                               onClose={() => setIsAddOpen(false)}
+                              modal={modal}
+                              setModal={setModal}
+                              userGroupOptions={userGroupOptions}
+                              errors={errors}
+                            />
+                          );
+                        })()}
+                        {(() => {
+                          const userGroupOptions = userGroupDropDown;
+                          return (
+                            <EditUserDialog
+                              isOpen={isEditOpen}
+                              onClose={() => setIsEditOpen(false)}
                               modal={modal}
                               setModal={setModal}
                               userGroupOptions={userGroupOptions}
