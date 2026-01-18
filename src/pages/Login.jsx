@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
-import bg from "../assets/images/login/back-3.jpg";
 import { login, requireAuth } from "../api/administration/authenticationApi";
 import { validateInputTextNoUpperCase } from "../utils/StringUtils";
 import ServerMessageToast from "../components/ServerMessageToast";
@@ -115,6 +114,13 @@ export default function Login() {
   return (
     <>
       <div className="login-container">
+        <div className="login-mobile-header">
+          <img src={logo} alt="Logo" className="login-mobile-logo" />
+          <div className="login-header-mobile-text">
+            <h2>Sirima Lanka Pvt. Ltd.</h2>
+            <p>Admin Console</p>
+          </div>
+        </div>
         <div className="login-left"></div>
         <div className="login-right">
           <div className="login-form-container">
