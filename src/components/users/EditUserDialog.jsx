@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Form, useNavigation } from "react-router-dom";
 import { X, User, Mail, Shield } from "lucide-react";
-import { validateInputTextNoUpperCase } from "../utils/StringUtils";
+import { validateInputTextNoUpperCase } from "../../utils/StringUtils";
 
 export default function EditUserDialog({
   isOpen,

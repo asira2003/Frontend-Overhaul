@@ -24,6 +24,7 @@ import { validateInputText } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
 import ViewUserGroup from "../../components/user-groups/ViewUserGroup";
 import DeleteUserGroup from "../../components/user-groups/DeleteUserGroup";
+import AddUserGroup from "../../components/user-groups/AddUserGroup";
 
 export async function loader({ request }) {
   const authentication = requireAuth();
@@ -163,6 +164,8 @@ export default function UserGroups() {
   });
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [modal, setModal] = useState({
     authorities: {
       add: false,
@@ -486,10 +489,11 @@ export default function UserGroups() {
                                   <button
                                     className="list-add-btn"
                                     type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#addUserGroupModal"
                                     disabled={!authorities.add}
-                                    onClick={clearModalData}
+                                    onClick={() => {
+                                      clearModalData();
+                                      setIsAddOpen(true);
+                                    }}
                                   >
                                     <i className="fa-solid fa-users-plus"></i>
                                     Add New User Group
@@ -848,6 +852,15 @@ export default function UserGroups() {
                             />
                           );
                         })()}
+                        <AddUserGroup
+                          isOpen={isAddOpen}
+                          onClose={() => setIsAddOpen(false)}
+                          modal={modal}
+                          setModal={setModal}
+                          modulePrivilegesChecklist={modulePrivilegesChecklist}
+                          modulePrivileges={modulePrivileges}
+                          errors={errors}
+                        />
                       </>
                     );
                   }}

@@ -1,5 +1,3 @@
-//users
-
 import React, { Suspense, useEffect, useState } from "react";
 import {
   useLoaderData,
@@ -25,10 +23,10 @@ import {
   validateInputTextNoUpperCase,
 } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
-import ViewUserDialog from "../../components/ViewUserDialog";
-import AddUserDialog from "../../components/AddUserDialog";
-import DeleteUserDialog from "../../components/DeleteUserDialog";
-import EditUserDialog from "../../components/EditUserDialog";
+import ViewUserDialog from "../../components/users/ViewUserDialog";
+import AddUserDialog from "../../components/users/AddUserDialog";
+import DeleteUserDialog from "../../components/users/DeleteUserDialog";
+import EditUserDialog from "../../components/users/EditUserDialog";
 
 export async function loader({ request }) {
   const url = new URL(request.url);

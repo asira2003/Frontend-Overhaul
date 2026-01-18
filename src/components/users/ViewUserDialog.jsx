@@ -10,7 +10,6 @@ function groupClassName(groupKey) {
 }
 
 export default function ViewUserDialog({ isOpen, onClose, user }) {
-  // lock background scroll while open
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("no-scroll");
