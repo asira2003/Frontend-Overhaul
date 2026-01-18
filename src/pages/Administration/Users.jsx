@@ -26,6 +26,7 @@ import {
 } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
 import ViewUserDialog from "../../components/ViewUserDialog";
+import AddUserDialog from "../../components/AddUserDialog";
 import DeleteUserDialog from "../../components/DeleteUserDialog";
 
 export async function loader({ request }) {
@@ -259,7 +260,7 @@ export default function Users() {
     ) {
       console.log(response);
       if (response.formType === "addUsers" && response.message.success) {
-        document.getElementById("addUserModalClose").click();
+        setIsAddOpen(false);
         setTimeout(function () {
           clearModalData();
         }, 500);
@@ -312,6 +313,7 @@ export default function Users() {
     }));
   }
 
+  const [isAddOpen, setIsAddOpen] = useState(false);
   return (
     <>
       <Suspense fallback={<ContentThrobber />}>
@@ -457,10 +459,11 @@ export default function Users() {
                                   <button
                                     className="list-add-btn"
                                     type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#addUserModal"
                                     disabled={!authorities.add}
-                                    onClick={clearModalData}
+                                    onClick={() => {
+                                      clearModalData();
+                                      setIsAddOpen(true);
+                                    }}
                                   >
                                     <i className="fa-solid fa-user-plus"></i>
                                     Add New User
@@ -813,6 +816,20 @@ export default function Users() {
                         </section>
 
                         {/* View Dialog */}
+                        {/* Add Dialog */}
+                        {(() => {
+                          const userGroupOptions = userGroupDropDown;
+                          return (
+                            <AddUserDialog
+                              isOpen={isAddOpen}
+                              onClose={() => setIsAddOpen(false)}
+                              modal={modal}
+                              setModal={setModal}
+                              userGroupOptions={userGroupOptions}
+                              errors={errors}
+                            />
+                          );
+                        })()}
                         {(() => {
                           const userForDialog = modal?.userId
                             ? {
