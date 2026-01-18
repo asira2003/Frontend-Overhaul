@@ -62,16 +62,16 @@ const router = createBrowserRouter(
           action={SettingsAction}
         />
       </Route>
-      {/* <Route element={<PrimaryLayout />}> */}
-      <Route
-        path="login"
-        element={<Login />}
-        loader={LoginLoader}
-        action={LoginAction}
-      />
-    </Route>
-    // </Route>
-  )
+      <Route element={<PrimaryLayout />}>
+        <Route
+          path="login"
+          element={<Login />}
+          loader={LoginLoader}
+          action={LoginAction}
+        />
+      </Route>
+    </Route>,
+  ),
 );
 
 export default function App() {

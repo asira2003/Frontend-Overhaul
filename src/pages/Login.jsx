@@ -114,13 +114,6 @@ export default function Login() {
   return (
     <>
       <div className="login-container">
-        <div className="login-mobile-header">
-          <img src={logo} alt="Logo" className="login-mobile-logo" />
-          <div className="login-header-mobile-text">
-            <h2>Sirima Lanka Pvt. Ltd.</h2>
-            <p>Admin Console</p>
-          </div>
-        </div>
         <div className="login-left"></div>
         <div className="login-right">
           <div className="login-form-container">

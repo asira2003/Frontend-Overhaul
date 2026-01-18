@@ -1,15 +1,30 @@
 .login-mobile-header {
+  position: absolute;
   display: flex;
   align-items: center;
   gap: 12px;
   margin-bottom: 2rem;
   width: 100%;
+  padding: 1.5rem;
   max-width: 420px;
 }
 .login-mobile-header .login-mobile-logo {
-  width: 48px;
-  height: 48px;
+  width: 4rem;
+  height: auto;
   object-fit: contain;
+}
+
+.login-header-mobile-text h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #002066;
+  margin: 0;
+}
+
+.login-header-mobile-text p {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .login-container {
