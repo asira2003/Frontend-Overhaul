@@ -329,58 +329,66 @@ export default function Users() {
                     const { authorities, pagination, objects, userGroups } =
                       data;
                     const dataGrid = objects.map((user) => {
+                      const ug = (
+                        user.userGroup.userGroupDescription || "USER"
+                      ).toUpperCase();
+                      const pillClass = ug.includes("ADMIN")
+                        ? "group-admin"
+                        : ug.includes("MANAGER")
+                          ? "group-manager"
+                          : ug.includes("MODERATOR")
+                            ? "group-moderator"
+                            : "group-user";
                       return (
                         <tr key={user.userId}>
-                          <td className="text-truncate">{user.userId}</td>
-                          <td className="text-truncate">{user.fullName}</td>
-                          <td className="text-truncate">{user.userEmail}</td>
-                          <td className="text-truncate">
-                            {user.userGroup.userGroupDescription}
+                          <td>
+                            <strong>{user.userId}</strong>
+                          </td>
+                          <td>{user.fullName}</td>
+                          <td>{user.userEmail}</td>
+                          <td>
+                            <span className={`group-pill ${pillClass}`}>
+                              {user.userGroup.userGroupDescription}
+                            </span>
                           </td>
                           <td>
-                            <div className="row">
-                              <div className="col col-3">
-                                <button
-                                  type="button"
-                                  className="action-btn"
-                                  title="View"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#viewUserModal"
-                                  disabled={!user.authorities.view}
-                                  value={user.userId}
-                                  onClick={() => loadModalData(user.userId)}
-                                >
-                                  <i className="fa-sharp fa-solid fa-eye"></i>
-                                </button>
-                              </div>
-                              <div className="col col-3">
-                                <button
-                                  type="button"
-                                  className="action-btn"
-                                  title="Edit"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#editUserModal"
-                                  disabled={!user.authorities.edit}
-                                  value={user.userId}
-                                  onClick={() => loadModalData(user.userId)}
-                                >
-                                  <i className="fa-sharp fa-solid fa-pen"></i>
-                                </button>
-                              </div>
-                              <div className="col col-3">
-                                <button
-                                  type="button"
-                                  className="action-btn delete-btn"
-                                  title="Delete"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#deleteUserModal"
-                                  disabled={!user.authorities.delete}
-                                  value={user.userId}
-                                  onClick={() => loadModalData(user.userId)}
-                                >
-                                  <i className="fa-sharp fa-solid fa-trash"></i>
-                                </button>
-                              </div>
+                            <div className="users-actions">
+                              <button
+                                type="button"
+                                className="action-icon view"
+                                title="View"
+                                data-bs-toggle="modal"
+                                data-bs-target="#viewUserModal"
+                                disabled={!user.authorities.view}
+                                value={user.userId}
+                                onClick={() => loadModalData(user.userId)}
+                              >
+                                <i className="fa-solid fa-eye"></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="action-icon edit"
+                                title="Edit"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editUserModal"
+                                disabled={!user.authorities.edit}
+                                value={user.userId}
+                                onClick={() => loadModalData(user.userId)}
+                              >
+                                <i className="fa-solid fa-pen"></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="action-icon delete"
+                                title="Delete"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteUserModal"
+                                disabled={!user.authorities.delete}
+                                value={user.userId}
+                                onClick={() => loadModalData(user.userId)}
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -685,90 +693,9 @@ export default function Users() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {objects.map((user) => {
-                                        const ug = (
-                                          user.userGroup.userGroupDescription ||
-                                          "USER"
-                                        ).toUpperCase();
-                                        const pillClass = ug.includes("ADMIN")
-                                          ? "group-admin"
-                                          : ug.includes("MANAGER")
-                                            ? "group-manager"
-                                            : ug.includes("MODERATOR")
-                                              ? "group-moderator"
-                                              : "group-user";
-                                        return (
-                                          <tr key={user.userId}>
-                                            <td>
-                                              <strong>{user.userId}</strong>
-                                            </td>
-                                            <td>{user.fullName}</td>
-                                            <td>{user.userEmail}</td>
-                                            <td>
-                                              <span
-                                                className={`group-pill ${pillClass}`}
-                                              >
-                                                {
-                                                  user.userGroup
-                                                    .userGroupDescription
-                                                }
-                                              </span>
-                                            </td>
-                                            <td>
-                                              <div className="users-actions">
-                                                <button
-                                                  type="button"
-                                                  className="action-icon view"
-                                                  title="View"
-                                                  data-bs-toggle="modal"
-                                                  data-bs-target="#viewUserModal"
-                                                  disabled={
-                                                    !user.authorities.view
-                                                  }
-                                                  value={user.userId}
-                                                  onClick={() =>
-                                                    loadModalData(user.userId)
-                                                  }
-                                                >
-                                                  <i className="fa-solid fa-eye"></i>
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="action-icon edit"
-                                                  title="Edit"
-                                                  data-bs-toggle="modal"
-                                                  data-bs-target="#editUserModal"
-                                                  disabled={
-                                                    !user.authorities.edit
-                                                  }
-                                                  value={user.userId}
-                                                  onClick={() =>
-                                                    loadModalData(user.userId)
-                                                  }
-                                                >
-                                                  <i className="fa-solid fa-pen"></i>
-                                                </button>
-                                                <button
-                                                  type="button"
-                                                  className="action-icon delete"
-                                                  title="Delete"
-                                                  data-bs-toggle="modal"
-                                                  data-bs-target="#deleteUserModal"
-                                                  disabled={
-                                                    !user.authorities.delete
-                                                  }
-                                                  value={user.userId}
-                                                  onClick={() =>
-                                                    loadModalData(user.userId)
-                                                  }
-                                                >
-                                                  <i className="fa-solid fa-trash"></i>
-                                                </button>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })}
+                                      {objects.length > 0
+                                        ? dataGridOffset(dataGrid)
+                                        : null}
                                       {objects.length === 0 && (
                                         <tr>
                                           <td

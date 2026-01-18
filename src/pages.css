@@ -148,6 +148,7 @@
 }
 .users-table tbody tr {
   transition: background 160ms ease;
+  border-bottom: 1px solid #e2e8f0; /* light board under each row */
 }
 .users-table tbody tr:hover {
   background: rgba(241, 245, 249, 0.5);
