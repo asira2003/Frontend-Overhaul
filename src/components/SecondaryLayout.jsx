@@ -6,7 +6,7 @@ import {
   useNavigation,
 } from "react-router-dom";
 import Header from "./SecondaryHeader";
-import Footer from "./SecondaryFooter";
+import PrimaryFooter from "./PrimaryFooter.jsx";
 import SideNavbar from "./SideNavbar";
 import Throbber from "./throbbers/FullscreenThrobber.jsx";
 import { requireAuth } from "../api/administration/authenticationApi";
@@ -35,31 +35,31 @@ export default function SecondaryLayout() {
     /\/privileges/.test(loaderData.pathname)
       ? "administration"
       : loaderData.pathname === "/settings"
-      ? "settings"
-      : loaderData.pathname === "/"
-      ? "overview"
-      : "";
+        ? "settings"
+        : loaderData.pathname === "/"
+          ? "overview"
+          : "";
   const activeFeature =
     loaderData.pathname === "/users"
       ? "users"
       : loaderData.pathname === "/usergroups" ||
-        /\/privileges/.test(loaderData.pathname)
-      ? "usergroups"
-      : loaderData.pathname === "/settings"
-      ? "settings"
-      : loaderData.pathname === "/"
-      ? "overview"
-      : "";
+          /\/privileges/.test(loaderData.pathname)
+        ? "usergroups"
+        : loaderData.pathname === "/settings"
+          ? "settings"
+          : loaderData.pathname === "/"
+            ? "overview"
+            : "";
   return (
     <>
       {renderThrobber(navigation)}
       <Header entryUser={loaderData.entryUser} />
-      <SideNavbar
+      {/* <SideNavbar
         activeModuleParam={activeModule}
         activeFeatureParam={activeFeature}
-      />
+      /> */}
       <Outlet />
-      <Footer />
+      <PrimaryFooter />
     </>
   );
 }

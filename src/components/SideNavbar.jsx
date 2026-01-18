@@ -1,25 +1,22 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/images/logo/logo.png";
+import { Link } from "react-router-dom";
 
 export default function SideNavbar({ activeModuleParam, activeFeatureParam }) {
   const [activeModule, setActiveModule] = useState(activeModuleParam);
   const [activeFeature, setActiveFeature] = useState(activeFeatureParam);
-  const navigate = useNavigate();
 
-  const modules = JSON.parse(sessionStorage.getItem("modules")) || [];
-  const features = JSON.parse(sessionStorage.getItem("features")) || [];
+  const modules = JSON.parse(sessionStorage.getItem("modules") || "[]");
+  const features = JSON.parse(sessionStorage.getItem("features") || "[]");
+
+  const [collapsed, setCollapsed] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(
+    activeModuleParam === "administration",
+  );
 
   function toggleNavState(module, feature) {
     setActiveModule(module);
     setActiveFeature(feature);
   }
-
-  const [isSideNavOpen, setIsSideNavOpen] = useState(false);
-
-  const toggleSideNav = () => {
-    setIsSideNavOpen(!isSideNavOpen);
-  };
 
   const isAdministrationVisible =
     modules.includes("PE-1") &&
@@ -29,188 +26,63 @@ export default function SideNavbar({ activeModuleParam, activeFeatureParam }) {
       features.includes("PE-5"));
 
   return (
-    <>
-      <section>
-        <div className={`side-bar-icon ${isSideNavOpen ? "opened" : ""}`}>
-          <i
-            className={`fas fa-angle-right side-icon ${
-              isSideNavOpen ? "close" : ""
-            }`}
-            onClick={toggleSideNav}
-          />
-        </div>
-        <div
-          className={`side-navigation-container fixed-top bg-theme-1 border-end ${
-            isSideNavOpen ? "side-nav-open" : "side-nav-hidden"
-          }`}
-        >
-          <div className="container side-navigation-positioner">
-            <div className="row justify-content-center">
-              <div className="col align-self-center text-center">
-                <img src={logo} className="img-fluid logo-side" alt="logo" />
-              </div>
-            </div>
-            <div className="row justify-content-center">
-              <div className="col align-self-center">
-                <div
-                  className={`list-group-item side-nav-item-border-modifer list-group-item-action ${
-                    activeFeature === "overview"
-                      ? "side-navigation-item-active"
-                      : "side-navigation-item"
-                  } side-nav-border-bottom  overview-btn`}
-                >
-                  <div className="row">
-                    <div className="col text-truncate">
-                      <Link
-                        to="/"
-                        className="stretched-link link-text-modifer"
-                        onClick={() => {
-                          toggleNavState("overview", "overview");
-                          toggleSideNav();
-                        }}
-                      >
-                        <i className="fa-solid fa-home"></i>
-                        &nbsp;&nbsp;Overview
-                      </Link>
-                    </div>
-                    <div className="col col-3 text-end">
-                      <i className="fa-sharp fa-solid fa-caret-right"></i>
-                    </div>
-                  </div>
-                </div>
+    <aside className={`sidebar-modern ${collapsed ? "collapsed" : "expanded"}`}>
+      <button
+        className="sidebar-toggle-pill"
+        onClick={() => setCollapsed((v) => !v)}
+        aria-label="Toggle sidebar"
+      >
+        <i
+          className={`fa-solid fa-chevron-${collapsed ? "right" : "left"}`}
+        ></i>
+      </button>
 
-                {isAdministrationVisible && (
-                  <div className="accordion-item accordion accordion-flush ">
-                    <div className="accordion-header" id="sideNavAccordionHead">
-                      <button
-                        className={`accordion-button side-navigation-item-group-btn ${
-                          activeModule === "administration" ? "" : "collapsed"
-                        }`}
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#administration"
-                        aria-expanded="false"
-                        aria-controls="administration"
-                      >
-                        <i className="fa-solid fa-users-gear fa-sm"></i>
-                        &nbsp;&nbsp;Administration
-                      </button>
-                    </div>
-                    <div
-                      id="administration"
-                      className={`accordion-collapse collapse side-navigation-item-group ${
-                        activeModule === "administration" ? "show" : ""
-                      }`}
-                      aria-labelledby="administration"
-                    >
-                      {features.includes("PE-1") && (
-                        <div
-                          className={`list-group-item list-group-item-action ${
-                            activeFeature === "users"
-                              ? "side-navigation-item-active"
-                              : "side-navigation-item"
-                          } side-nav-border-bottom`}
-                        >
-                          <div className="row">
-                            <div className="col">
-                              <Link
-                                to="users"
-                                className="stretched-link link-text-modifer"
-                                onClick={() => {
-                                  toggleNavState("administration", "users");
-                                  toggleSideNav();
-                                }}
-                              >
-                                <i className="fa-solid fa-user fa-sm"></i>
-                                &nbsp;&nbsp;Users
-                              </Link>
-                            </div>
-                            <div className="col col-2 text-end">
-                              <i className="fa-sharp fa-solid fa-caret-right"></i>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      {(features.includes("PE-2") ||
-                        features.includes("PE-3")) && (
-                        <div
-                          className={`list-group-item list-group-item-action ${
-                            activeFeature === "usergroups"
-                              ? "side-navigation-item-active"
-                              : "side-navigation-item"
-                          } side-nav-border-bottom`}
-                        >
-                          <div className="row">
-                            <div className="col">
-                              <Link
-                                to="usergroups"
-                                className="stretched-link link-text-modifer"
-                                onClick={() => {
-                                  toggleNavState(
-                                    "administration",
-                                    "usergroups"
-                                  );
-                                  toggleSideNav();
-                                }}
-                              >
-                                <i className="fa-solid fa-user-group fa-sm"></i>
-                                &nbsp;&nbsp;User Groups
-                              </Link>
-                            </div>
-                            <div className="col col-2 text-end">
-                              <i className="fa-sharp fa-solid fa-caret-right"></i>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+      <div className="sidebar-inner">
+        <nav className="sidebar-nav">
+          {isAdministrationVisible && (
+            <div className="sidebar-group">
+              <button
+                className={`sidebar-group-toggle ${adminOpen ? "open" : ""}`}
+                onClick={() => setAdminOpen((v) => !v)}
+              >
+                <i className="fa-solid fa-users-gear"></i>
+                <span className="label">Administration</span>
+                <i
+                  className={`fa-solid fa-chevron-${adminOpen ? "up" : "down"} caret`}
+                />
+              </button>
+              <div
+                className={`sidebar-group-content ${adminOpen ? "open" : ""}`}
+              >
+                {features.includes("PE-1") && (
+                  <Link
+                    to="/users"
+                    className={`sidebar-subitem ${activeFeature === "users" ? "active" : ""}`}
+                    onClick={() => toggleNavState("administration", "users")}
+                  >
+                    <i className="fa-solid fa-user"></i>
+                    <span className="label">Users</span>
+                  </Link>
                 )}
-
-                <div className="side-nav-spacer"></div>
-                <div className="row justify-content-center side-navigation-positioner-row">
-                  <div className="col align-self-center">
-                    <div
-                      className="accordion accordion-flush"
-                      id="sideNavAccordion"
-                    >
-                      {features.includes("PE-4") && (
-                        <div
-                          className={`list-group-item list-group-item-action ${
-                            activeFeature === "settings"
-                              ? "side-navigation-item-active"
-                              : "side-navigation-item settings"
-                          } side-nav-border-bottom`}
-                        >
-                          <div className="row">
-                            <div className="col text-truncate">
-                              <Link
-                                to="/settings"
-                                className="stretched-link link-text-modifer"
-                                onClick={() => {
-                                  toggleNavState("settings", "settings");
-                                  toggleSideNav();
-                                }}
-                              >
-                                <i className="fa-solid fa-gear"></i>
-                                &nbsp;&nbsp;Settings
-                              </Link>
-                            </div>
-                            <div className="col col-3 text-end">
-                              <i className="fa-sharp fa-solid fa-caret-right"></i>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                {(features.includes("PE-2") || features.includes("PE-3")) && (
+                  <Link
+                    to="/usergroups"
+                    className={`sidebar-subitem ${activeFeature === "usergroups" ? "active" : ""}`}
+                    onClick={() =>
+                      toggleNavState("administration", "usergroups")
+                    }
+                  >
+                    <i className="fa-solid fa-user-group"></i>
+                    <span className="label">User Groups</span>
+                  </Link>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-      {isSideNavOpen && <div className="overlay" onClick={toggleSideNav}></div>}
-    </>
+          )}
+
+          {/* Settings intentionally removed from sidebar */}
+        </nav>
+      </div>
+    </aside>
   );
 }
