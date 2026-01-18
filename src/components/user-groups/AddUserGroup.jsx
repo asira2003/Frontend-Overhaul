@@ -28,7 +28,7 @@ export default function AddUserGroup({
         {/* Header */}
         <div className="app-dialog__header">
           <div>
-            <h2 className="app-dialog__title">User Groups Management | Add</h2>
+            <h2 className="app-dialog__title">Add New User Group</h2>
             <p className="app-dialog__subtitle">
               Create a new user group and assign privileges
             </p>
@@ -67,6 +67,7 @@ export default function AddUserGroup({
                     userGroupDescription: validateInputText(event.target.value),
                   }));
                 }}
+                placeholder="Enter user group name"
               />
 
               {errors?.add?.adduserGroupDescriptionError?.length > 0 && (
@@ -99,6 +100,7 @@ export default function AddUserGroup({
                       accessDuration: event.target.value,
                     }));
                   }}
+                  placeholder="Enter duration"
                 />
                 <span className="app-input-addon">minutes</span>
               </div>
@@ -108,6 +110,9 @@ export default function AddUserGroup({
                   {errors.add.addAccessDurationError[0].message}
                 </div>
               )}
+              <div className="app-helper">
+                Controls session timeout for members of this group.
+              </div>
             </div>
 
             {/* Module Privileges */}
@@ -137,29 +142,30 @@ export default function AddUserGroup({
               name="modulePrivileges"
               value={JSON.stringify(modulePrivileges)}
             />
+
+            <input type="hidden" name="formType" value="addUserGroup" />
+
+            {/* Actions */}
+            <div className="app-actions">
+              <button
+                type="button"
+                className="app-dialog__close-btn"
+                onClick={onClose}
+                disabled={submitting}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="submit"
+                className="app-btn app-btn--primary"
+                disabled={submitting}
+              >
+                <Plus size={16} style={{ marginRight: 6 }} />
+                {submitting ? "Submitting..." : "Add New User Group"}
+              </button>
+            </div>
           </Form>
-        </div>
-
-        {/* Footer */}
-        <div className="app-dialog__footer">
-          <button
-            type="button"
-            className="app-btn app-btn--secondary"
-            onClick={onClose}
-            disabled={submitting}
-          >
-            Cancel
-          </button>
-
-          <button
-            type="submit"
-            form="addUserGroupForm"
-            className="app-btn app-btn--primary"
-            disabled={submitting}
-          >
-            <Plus size={16} style={{ marginRight: 6 }} />
-            {submitting ? "Submitting..." : "Add New User Group"}
-          </button>
         </div>
       </div>
     </div>

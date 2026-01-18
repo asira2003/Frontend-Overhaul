@@ -58,6 +58,10 @@ export async function action({ request }) {
     const accessDuration = formData.get("accessDuration");
     const modulePrivileges = JSON.parse(formData.get("modulePrivileges")) || [];
 
+    console.log(userGroupDescription);
+    console.log(accessDuration);
+    console.log(modulePrivileges);
+
     if (!userGroupDescription) {
       response.errors.push({
         name: "adduserGroupDescription",

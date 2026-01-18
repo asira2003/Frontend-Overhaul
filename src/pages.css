@@ -645,6 +645,19 @@
   font-size: 12px;
   color: #dc2626;
 }
+.app-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-input-addon {
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 13px;
+}
 .app-actions {
   display: flex;
   justify-content: flex-end;
@@ -665,6 +678,32 @@
 }
 .app-btn--primary:hover {
   background: #1d4ed8;
+}
+
+/* Table styles for module privileges */
+.app-table-wrapper {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.app-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+.app-table tbody td {
+  padding: 12px;
+  font-size: 13px;
+  color: #0f172a;
+  border-top: 1px solid #e2e8f0;
 }
 
 /* Larger screens: center modal and enrich layout */
