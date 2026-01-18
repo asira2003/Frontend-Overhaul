@@ -328,7 +328,8 @@
 /* Mobile-first, responsive, visual parity with design image */
 /* ===================== */
 
-.user-dialog-overlay {
+.user-dialog-overlay,
+.app-dialog-overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -340,7 +341,8 @@
   backdrop-filter: blur(2px);
 }
 
-.user-dialog {
+.user-dialog,
+.app-dialog {
   width: 100%;
   max-width: 640px;
   background: #ffffff;
@@ -350,7 +352,8 @@
   overflow: hidden;
 }
 
-.user-dialog__header {
+.user-dialog__header,
+.app-dialog__header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -359,18 +362,21 @@
   background: linear-gradient(90deg, #eef2ff 0%, #f8fafc 100%);
   border-bottom: 1px solid #e2e8f0;
 }
-.user-dialog__title {
+.user-dialog__title,
+.app-dialog__title {
   margin: 0;
   font-size: 22px;
   font-weight: 700;
   color: #0f172a;
 }
-.user-dialog__subtitle {
+.user-dialog__subtitle,
+.app-dialog__subtitle {
   margin: 6px 0 0;
   font-size: 12px;
   color: #64748b;
 }
-.user-dialog__close {
+.user-dialog__close,
+.app-dialog__close {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -382,18 +388,21 @@
   color: #64748b;
   cursor: pointer;
 }
-.user-dialog__close:hover {
+.user-dialog__close:hover,
+.app-dialog__close:hover {
   background: #ffffff;
   border-color: #cbd5e1;
 }
 
-.user-dialog__body {
+.user-dialog__body,
+.app-dialog__body {
   padding: 16px;
   max-height: 70vh;
   overflow-y: auto;
 }
 
-.user-section {
+.user-section,
+.app-section {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -403,7 +412,8 @@
   border-radius: 12px;
   margin-bottom: 12px;
 }
-.user-section__icon {
+.user-section__icon,
+.app-section__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -428,23 +438,27 @@
   color: #d97706;
 }
 
-.user-section__label {
+.user-section__label,
+.app-section__label {
   margin: 0 0 4px 0;
   font-size: 12px;
   font-weight: 600;
   color: #64748b;
 }
-.user-section__value {
+.user-section__value,
+.app-section__value {
   margin: 0;
   font-size: 14px;
   font-weight: 700;
   color: #0f172a;
 }
-.user-section__value--break {
+.user-section__value--break,
+.app-section__value--break {
   word-break: break-all;
 }
 
-.user-group-chip {
+.user-group-chip,
+.app-group-chip {
   display: inline-flex;
   align-items: center;
   padding: 6px 10px;
@@ -453,33 +467,39 @@
   font-size: 12px;
   font-weight: 700;
 }
-.user-group--admin {
+.user-group--admin,
+.app-group--admin {
   background: #f3e8ff;
   color: #7c3aed;
   border-color: #e9d5ff;
 }
-.user-group--manager {
+.user-group--manager,
+.app-group--manager {
   background: #eff6ff;
   color: #2563eb;
   border-color: #dbeafe;
 }
-.user-group--moderator {
+.user-group--moderator,
+.app-group--moderator {
   background: #dcfce7;
   color: #16a34a;
   border-color: #bbf7d0;
 }
-.user-group--user {
+.user-group--user,
+.app-group--user {
   background: #f8fafc;
   color: #334155;
   border-color: #e2e8f0;
 }
 
-.user-timeline {
+.user-timeline,
+.app-timeline {
   border-top: 1px solid #e2e8f0;
   padding-top: 14px;
   margin-top: 8px;
 }
-.user-timeline__title {
+.user-timeline__title,
+.app-timeline__title {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -490,7 +510,8 @@
   letter-spacing: 0.04em;
   margin: 0 0 12px 0;
 }
-.user-timeline__grid {
+.user-timeline__grid,
+.app-timeline__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
@@ -537,14 +558,16 @@
   color: #0f172a;
 }
 
-.user-dialog__footer {
+.user-dialog__footer,
+.app-dialog__footer {
   padding: 16px;
   border-top: 1px solid #e2e8f0;
   background: #f8fafc;
   display: flex;
   justify-content: flex-end;
 }
-.user-dialog__close-btn {
+.user-dialog__close-btn,
+.app-dialog__close-btn {
   padding: 10px 16px;
   border-radius: 10px;
   border: none;
@@ -552,16 +575,36 @@
   color: #ffffff;
   cursor: pointer;
 }
-.user-dialog__close-btn:hover {
+.user-dialog__close-btn:hover,
+.app-dialog__close-btn:hover {
   background: #111827;
+}
+
+/* destructive button */
+.app-dialog__delete-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  cursor: pointer;
+}
+.app-dialog__delete-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.app-dialog__delete-btn:hover {
+  background: #b91c1c;
 }
 
 /* Larger screens: center modal and enrich layout */
 @media (min-width: 768px) {
-  .user-dialog {
+  .user-dialog,
+  .app-dialog {
     max-width: 720px;
   }
-  .user-timeline__grid {
+  .user-timeline__grid,
+  .app-timeline__grid {
     grid-template-columns: repeat(2, 1fr);
   }
   .timeline-card__content {

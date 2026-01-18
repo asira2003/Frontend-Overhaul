@@ -1,5 +1,15 @@
 import React, { useEffect } from "react";
-import { X, User, Mail, Shield, Calendar, UserPlus, Edit } from "lucide-react";
+import {
+  X,
+  User,
+  Mail,
+  Shield,
+  Calendar,
+  UserPlus,
+  Edit,
+  Trash2,
+} from "lucide-react";
+import { Form } from "react-router-dom";
 
 function groupClassName(groupKey) {
   const key = (groupKey || "USER").toUpperCase();
@@ -9,15 +19,15 @@ function groupClassName(groupKey) {
   return "app-group-chip app-group--user";
 }
 
-export default function ViewUserDialog({ isOpen, onClose, user }) {
-  // lock background scroll while open
+export default function DeleteUserDialog({
+  isOpen,
+  onClose,
+  user,
+  isSubmitting,
+}) {
   useEffect(() => {
-    if (isOpen) {
-      document.body.classList.add("no-scroll");
-    }
-    return () => {
-      document.body.classList.remove("no-scroll");
-    };
+    if (isOpen) document.body.classList.add("no-scroll");
+    return () => document.body.classList.remove("no-scroll");
   }, [isOpen]);
 
   if (!isOpen || !user) return null;
@@ -28,23 +38,19 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
   const lastModifiedBy = user.lastModifiedBy || "";
   const groupKey = (user.userGroup || "USER").toUpperCase();
 
-  const handleClose = () => {
-    onClose();
-  };
-
   return (
     <div className="app-dialog-overlay" role="dialog" aria-modal="true">
       <div className="app-dialog">
         <div className="app-dialog__header">
-          <div className="user-dialog__header-left">
-            <h2 className="app-dialog__title">User Details</h2>
+          <div>
+            <h2 className="app-dialog__title">Confirm Delete</h2>
             <p className="app-dialog__subtitle">
-              Complete information about this user
+              Please review the details before deleting
             </p>
           </div>
           <button
             className="app-dialog__close"
-            onClick={handleClose}
+            onClick={onClose}
             aria-label="Close"
           >
             <X size={18} />
@@ -52,7 +58,26 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
         </div>
 
         <div className="app-dialog__body">
-          {/* User ID */}
+          {/* Danger banner */}
+          <div
+            className="app-section"
+            style={{ borderColor: "#fecaca", background: "#fee2e2" }}
+          >
+            <div
+              className="app-section__icon"
+              style={{ background: "#fecaca", color: "#dc2626" }}
+            >
+              <Trash2 size={18} />
+            </div>
+            <div className="user-section__content">
+              <p className="app-section__label">This action is irreversible</p>
+              <p className="app-section__value">
+                Deleting this user will permanently remove their account.
+              </p>
+            </div>
+          </div>
+
+          {/* User summary */}
           <div className="app-section">
             <div className="app-section__icon icon-blue">
               <User size={18} />
@@ -63,7 +88,6 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
             </div>
           </div>
 
-          {/* Full Name */}
           <div className="app-section">
             <div className="app-section__icon icon-purple">
               <User size={18} />
@@ -74,7 +98,6 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
             </div>
           </div>
 
-          {/* Email */}
           <div className="app-section">
             <div className="app-section__icon icon-green">
               <Mail size={18} />
@@ -87,7 +110,6 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
             </div>
           </div>
 
-          {/* User Group */}
           <div className="app-section">
             <div className="app-section__icon icon-amber">
               <Shield size={18} />
@@ -143,10 +165,42 @@ export default function ViewUserDialog({ isOpen, onClose, user }) {
           </div>
         </div>
 
-        <div className="app-dialog__footer">
-          <button className="app-dialog__close-btn" onClick={handleClose}>
-            Close
+        <div className="app-dialog__footer" style={{ gap: "8px" }}>
+          <button
+            className="app-dialog__close-btn"
+            type="button"
+            onClick={onClose}
+          >
+            Cancel
           </button>
+          <Form method="post">
+            <input
+              type="hidden"
+              name="userId"
+              value={user.id}
+              readOnly={true}
+            />
+            <input
+              type="hidden"
+              name="batchNo"
+              value={user.batchNo || ""}
+              readOnly={true}
+            />
+            <input
+              type="hidden"
+              name="formType"
+              value="deleteUser"
+              readOnly={true}
+            />
+            <button
+              type="submit"
+              className="app-dialog__delete-btn"
+              disabled={isSubmitting}
+            >
+              <Trash2 size={16} style={{ marginRight: 6 }} />
+              {isSubmitting ? "Submitting..." : "Delete User"}
+            </button>
+          </Form>
         </div>
       </div>
     </div>

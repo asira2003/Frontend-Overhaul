@@ -26,6 +26,7 @@ import {
 } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
 import ViewUserDialog from "../../components/ViewUserDialog";
+import DeleteUserDialog from "../../components/DeleteUserDialog";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -219,6 +220,7 @@ export default function Users() {
     },
   });
   const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const response = useActionData();
   const errors = {
     add: {
@@ -355,7 +357,7 @@ export default function Users() {
                                 title="View"
                                 disabled={!user.authorities.view}
                                 value={user.userId}
-                                onClick={() => loadModalData(user.userId)}
+                                onClick={() => openView(user.userId)}
                               >
                                 <i className="fa-solid fa-eye"></i>
                               </button>
@@ -375,11 +377,9 @@ export default function Users() {
                                 type="button"
                                 className="action-icon delete"
                                 title="Delete"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteUserModal"
                                 disabled={!user.authorities.delete}
                                 value={user.userId}
-                                onClick={() => loadModalData(user.userId)}
+                                onClick={() => openDelete(user.userId)}
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </button>
@@ -430,7 +430,14 @@ export default function Users() {
                           },
                         };
                       });
+                    }
+                    function openView(userId) {
+                      loadModalData(userId);
                       setIsViewOpen(true);
+                    }
+                    function openDelete(userId) {
+                      loadModalData(userId);
+                      setIsDeleteOpen(true);
                     }
                     return (
                       <>
@@ -819,6 +826,7 @@ export default function Users() {
                                 createdBy: modal.createdBy,
                                 lastModified: modal.lastModified,
                                 lastModifiedBy: modal.lastModifiedBy,
+                                batchNo: modal.batchNo,
                               }
                             : null;
                           return (
@@ -826,6 +834,32 @@ export default function Users() {
                               isOpen={isViewOpen}
                               onClose={() => setIsViewOpen(false)}
                               user={userForDialog}
+                            />
+                          );
+                        })()}
+
+                        {(() => {
+                          const userForDialog = modal?.userId
+                            ? {
+                                id: modal.userId,
+                                fullName: modal.fullName,
+                                email: modal.userEmail,
+                                userGroup:
+                                  modal?.userGroup?.userGroupDescription ||
+                                  "USER",
+                                created: modal.created,
+                                createdBy: modal.createdBy,
+                                lastModified: modal.lastModified,
+                                lastModifiedBy: modal.lastModifiedBy,
+                                batchNo: modal.batchNo,
+                              }
+                            : null;
+                          return (
+                            <DeleteUserDialog
+                              isOpen={isDeleteOpen}
+                              onClose={() => setIsDeleteOpen(false)}
+                              user={userForDialog}
+                              isSubmitting={navigation.state === "submitting"}
                             />
                           );
                         })()}
