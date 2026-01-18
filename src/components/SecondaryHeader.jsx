@@ -14,6 +14,7 @@ export default function SecondaryHeader() {
   const dropdownRef = useRef(null);
 
   const handleLogout = () => {
+    closeDropdown();
     logout(navigate);
   };
 
@@ -74,7 +75,10 @@ export default function SecondaryHeader() {
             <button
               className="profile-item"
               type="button"
-              onClick={() => navigate("/settings")}
+              onClick={() => {
+                closeDropdown();
+                navigate("/settings");
+              }}
             >
               <i className="bx bx-cog"></i>
               <span>Settings</span>

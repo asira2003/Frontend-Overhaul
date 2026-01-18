@@ -25,16 +25,13 @@ const ServerMessageToast = ({ message, id, onRemove, index }) => {
     }, 300);
   };
 
+  // Skip rendering when message is missing to avoid empty notifications
+  if (!message) {
+    return null;
+  }
+
   // Determine toast type and styling
   const getToastConfig = () => {
-    if (!message) {
-      return {
-        type: "info",
-        icon: XCircle,
-        message: "Notification",
-      };
-    }
-
     const messageText = message.text || message.message || message;
     const success = message.success !== undefined ? message.success : false;
 
