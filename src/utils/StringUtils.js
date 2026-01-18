@@ -41,6 +41,11 @@ export function validatePhoneNumber(input) {
   return output;
 }
 
+export function toNormalClass(str) {
+  if (!str) return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export const getAllCountryCodes = () => [
   { code: "+1" }, // United States, Canada, etc.
   { code: "+7" }, // Russia, Kazakhstan

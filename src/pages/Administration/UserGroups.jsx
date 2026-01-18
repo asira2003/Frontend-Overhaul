@@ -22,6 +22,8 @@ import {
 import ServerMessageToast from "../../components/ServerMessageToast";
 import { validateInputText } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
+import ViewUserGroup from "../../components/user-groups/ViewUserGroup";
+import DeleteUserGroup from "../../components/user-groups/DeleteUserGroup";
 
 export async function loader({ request }) {
   const authentication = requireAuth();
@@ -159,6 +161,8 @@ export default function UserGroups() {
     sortType: searchParams.get("sortType") || "created",
     sortOrder: searchParams.get("sortOrder") || "desc",
   });
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [modal, setModal] = useState({
     authorities: {
       add: false,
@@ -318,9 +322,19 @@ export default function UserGroups() {
                         };
                       });
                     }
+                    function openView(userGroupId) {
+                      loadModalData(userGroupId);
+                      setIsViewOpen(true);
+                    }
+                    function openDelete(userGroupId) {
+                      loadModalData(userGroupId);
+                      setIsDeleteOpen(true);
+                    }
 
                     const dataGrid = objects.map((userGroup) => {
-                      const ug = (userGroup.userGroupDescription || "").toUpperCase();
+                      const ug = (
+                        userGroup.userGroupDescription || ""
+                      ).toUpperCase();
                       const pillClass = ug.includes("ADMIN")
                         ? "group-admin"
                         : ug.includes("MANAGER")
@@ -348,10 +362,8 @@ export default function UserGroups() {
                                 data-bs-toggle="modal"
                                 data-bs-target="#viewUserGroupModal"
                                 disabled={!userGroup.authorities.view}
-                                value={userGroup.userId}
-                                onClick={() =>
-                                  loadModalData(userGroup.userGroupId)
-                                }
+                                value={userGroup.userGroupId}
+                                onClick={() => openView(userGroup.userGroupId)}
                               >
                                 <i className="fa-solid fa-eye"></i>
                               </button>
@@ -394,9 +406,9 @@ export default function UserGroups() {
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteUserGroupModal"
                                 disabled={!userGroup.authorities.delete}
-                                value={userGroup.userId}
+                                value={userGroup.userGroupId}
                                 onClick={() =>
-                                  loadModalData(userGroup.userGroupId)
+                                  openDelete(userGroup.userGroupId)
                                 }
                               >
                                 <i className="fa-solid fa-trash"></i>
@@ -791,6 +803,51 @@ export default function UserGroups() {
                             </div>
                           </div>
                         </section>
+
+                        {(() => {
+                          const userGroupForDialog = modal?.userGroupId
+                            ? {
+                                userGroupId: modal.userGroupId,
+                                userGroupDescription:
+                                  modal.userGroupDescription,
+                                accessDuration: modal.accessDuration,
+                                created: modal.created,
+                                createdBy: modal.createdBy,
+                                lastModified: modal.lastModified,
+                                lastModifiedBy: modal.lastModifiedBy,
+                              }
+                            : null;
+                          return (
+                            <ViewUserGroup
+                              isOpen={isViewOpen}
+                              onClose={() => setIsViewOpen(false)}
+                              data={userGroupForDialog}
+                            />
+                          );
+                        })()}
+                        {(() => {
+                          const userGroupForDialog = modal?.userGroupId
+                            ? {
+                                userGroupId: modal.userGroupId,
+                                userGroupDescription:
+                                  modal.userGroupDescription,
+                                accessDuration: modal.accessDuration,
+                                created: modal.created,
+                                createdBy: modal.createdBy,
+                                lastModified: modal.lastModified,
+                                lastModifiedBy: modal.lastModifiedBy,
+                                batchNo: modal.batchNo,
+                              }
+                            : null;
+                          return (
+                            <DeleteUserGroup
+                              isOpen={isDeleteOpen}
+                              onClose={() => setIsDeleteOpen(false)}
+                              data={userGroupForDialog}
+                              isSubmitting={navigation.state === "submitting"}
+                            />
+                          );
+                        })()}
                       </>
                     );
                   }}

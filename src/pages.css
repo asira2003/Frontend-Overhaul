@@ -587,6 +587,8 @@
   border: none;
   background: #dc2626;
   color: #ffffff;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 }
 .app-dialog__delete-btn:disabled {
