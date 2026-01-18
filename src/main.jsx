@@ -6,9 +6,10 @@ import "./assets/Box-Icons/css/boxicons.min.css";
 import "./assets/Remix-Icons/remixicon.css";
 
 import "./index_new.css";
+import "./login-page.css";
 // import "./index.css";
 // import "./styles.css";
-// import "./login.css";
+
 // import "./breakpoints.css";
 // import "./breakpoints-login.css";
 // import "./dashboard.css";
@@ -17,5 +18,5 @@ import "./index_new.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

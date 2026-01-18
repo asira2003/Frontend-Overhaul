@@ -49,7 +49,7 @@ export async function action({ request }) {
         sessionStorage.setItem("userGroupId", data.data.userGroup.userGroupId);
         sessionStorage.setItem(
           "userGroupDescription",
-          data.data.userGroup.userGroupDescription
+          data.data.userGroup.userGroupDescription,
         );
         sessionStorage.setItem("modules", JSON.stringify(data.data.modules));
         sessionStorage.setItem("features", JSON.stringify(data.data.features));
@@ -72,31 +72,40 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [toasts, setToasts] = useState([]);
+  const [toastCounter, setToastCounter] = useState(0);
 
   const [modal, setModal] = useState({
     username: "",
     password: "",
     resetPasswordemail: "",
   });
+
   useEffect(() => {
     if (response?.errors) {
       setValidationErrors(response.errors);
     }
 
-    setToasts((prevToasts) => {
-      const newToasts = prevToasts.map((x) => x);
-      if (response?.message) {
-        newToasts.unshift(
-          <ServerMessageToast
-            key={prevToasts.length + 1}
-            message={response?.message}
-            id={prevToasts.length + 1}
-          />
-        );
-      }
-      return newToasts;
-    });
+    if (response?.message) {
+      setToasts((prevToasts) => {
+        const newToast = {
+          id: toastCounter,
+          message: response.message,
+        };
+
+        // Add new toast to the beginning and keep only the last 3
+        const updatedToasts = [newToast, ...prevToasts].slice(0, 3);
+
+        return updatedToasts;
+      });
+
+      setToastCounter((prev) => prev + 1);
+    }
   }, [response]);
+
+  // Function to remove toasts
+  const removeToast = (id) => {
+    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
+  };
 
   // Helper to clear specific error
   const clearError = (fieldName) => {
@@ -140,7 +149,7 @@ export default function Login() {
                           return {
                             ...prevModal,
                             username: validateInputTextNoUpperCase(
-                              event.target.value
+                              event.target.value,
                             ),
                           };
                         });
@@ -184,7 +193,7 @@ export default function Login() {
                           return {
                             ...prevModal,
                             password: validateInputTextNoUpperCase(
-                              event.target.value
+                              event.target.value,
                             ),
                           };
                         });
@@ -247,7 +256,19 @@ export default function Login() {
           </div>
         </div>
       </div>
-      <div className="toast-wrapper">{toasts}</div>
+
+      {/* Toast notifications */}
+      <div className="toast-wrapper">
+        {toasts.map((toast, index) => (
+          <ServerMessageToast
+            key={toast.id}
+            message={toast.message}
+            id={toast.id}
+            index={index}
+            onRemove={removeToast}
+          />
+        ))}
+      </div>
     </>
   );
 }
