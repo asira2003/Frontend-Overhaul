@@ -180,6 +180,97 @@ body {
   text-decoration: underline;
 }
 
+/* throbbers */
+.content-throbber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.throbber-label {
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.throbber-spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.08);
+  border-top-color: #2563eb;
+  border-right-color: #9333ea;
+  animation: throbber-spin 0.7s linear infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+.throbber-spinner.sm {
+  width: 18px;
+  height: 18px;
+  border-width: 2px;
+}
+.throbber-spinner.md {
+  width: 22px;
+  height: 22px;
+  border-width: 3px;
+}
+.throbber-spinner.lg {
+  width: 36px;
+  height: 36px;
+  border-width: 4px;
+}
+
+@keyframes throbber-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .throbber-spinner {
+    animation: none;
+  }
+}
+
+/* Fullscreen throbber overlay */
+.fullscreen-throbber {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.25);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+}
+.fullscreen-throbber.align-top {
+  justify-content: flex-start;
+}
+.fullscreen-throbber.align-bottom {
+  justify-content: flex-end;
+}
+
+.fullscreen-throbber-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.75)
+  );
+  box-shadow:
+    0 20px 30px -8px rgba(0, 0, 0, 0.25),
+    0 6px 12px -6px rgba(0, 0, 0, 0.18);
+}
+
+.throbber-message {
+  color: #111827;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
 /* Footer responsive (tablet and up) */
 @media (min-width: 768px) {
   .footer {

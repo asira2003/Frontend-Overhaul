@@ -1,18 +1,10 @@
 import React from "react";
 
-export default function ContentThrobber() {
+export default function ContentThrobber({ label = "Loading...", size = "md" }) {
   return (
-    <div className="throbber-con-bg">
-      <div className="row h-100 justify-content-center">
-        <div className="col text-center align-self-center">
-          <div className="throbber-con-content">
-            <span className="spinner-border throbber-con" role="status"></span>
-            <span className="align-text-bottom fw-bold">
-              &nbsp;&nbsp;Please Wait...
-            </span>
-          </div>
-        </div>
-      </div>
+    <div className="content-throbber" role="status" aria-live="polite">
+      <span className={`throbber-spinner ${size}`} aria-hidden="true" />
+      {label && <span className="throbber-label">{label}</span>}
     </div>
   );
 }

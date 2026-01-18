@@ -1,24 +1,19 @@
 import React from "react";
 
-export default function FullscreenThrobber({ throbberAlignment }) {
+export default function FullscreenThrobber({
+  throbberAlignment = "center",
+  message = "Loading...",
+}) {
   return (
-    <>
+    <div className={`fullscreen-throbber align-${throbberAlignment}`}>
       <div
-        className={`throbber-fs-bg  ${
-          throbberAlignment === "content-center"
-            ? "throbber-fs-content-center"
-            : ""
-        }`}
+        className="fullscreen-throbber-card"
+        role="status"
+        aria-live="polite"
       >
-        <div className="row h-100 justify-content-center">
-          <div className="col text-center align-self-start">
-            <div className={"throbber-fs-content rounded-pill"}>
-              <span className="spinner-border throbber-fs" role="status"></span>
-              <span className="align-bottom">&nbsp;&nbsp;Please Wait...</span>
-            </div>
-          </div>
-        </div>
+        <span className="throbber-spinner lg" aria-hidden="true" />
+        {message && <p className="throbber-message">{message}</p>}
       </div>
-    </>
+    </div>
   );
 }
