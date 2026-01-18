@@ -25,6 +25,7 @@ import {
   validateInputTextNoUpperCase,
 } from "../../utils/StringUtils";
 import { pushToast } from "../../utils/ToastBus";
+import ViewUserDialog from "../../components/ViewUserDialog";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -217,6 +218,7 @@ export default function Users() {
       userGroupDescription: "",
     },
   });
+  const [isViewOpen, setIsViewOpen] = useState(false);
   const response = useActionData();
   const errors = {
     add: {
@@ -351,8 +353,6 @@ export default function Users() {
                                 type="button"
                                 className="action-icon view"
                                 title="View"
-                                data-bs-toggle="modal"
-                                data-bs-target="#viewUserModal"
                                 disabled={!user.authorities.view}
                                 value={user.userId}
                                 onClick={() => loadModalData(user.userId)}
@@ -430,6 +430,7 @@ export default function Users() {
                           },
                         };
                       });
+                      setIsViewOpen(true);
                     }
                     return (
                       <>
@@ -803,6 +804,31 @@ export default function Users() {
                             </div>
                           </div>
                         </section>
+
+                        {/* View Dialog */}
+                        {(() => {
+                          const userForDialog = modal?.userId
+                            ? {
+                                id: modal.userId,
+                                fullName: modal.fullName,
+                                email: modal.userEmail,
+                                userGroup:
+                                  modal?.userGroup?.userGroupDescription ||
+                                  "USER",
+                                created: modal.created,
+                                createdBy: modal.createdBy,
+                                lastModified: modal.lastModified,
+                                lastModifiedBy: modal.lastModifiedBy,
+                              }
+                            : null;
+                          return (
+                            <ViewUserDialog
+                              isOpen={isViewOpen}
+                              onClose={() => setIsViewOpen(false)}
+                              user={userForDialog}
+                            />
+                          );
+                        })()}
 
                         {/* Global toasts are rendered in layout via ToastBus */}
                       </>
