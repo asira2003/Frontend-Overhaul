@@ -352,7 +352,7 @@ export default function Users() {
                             </span>
                           </td>
                           <td>
-                            <div className="users-actions">
+                            <div className="list-actions">
                               <button
                                 type="button"
                                 className="action-icon view"
@@ -443,17 +443,17 @@ export default function Users() {
                           <div className="content">
                             <div className="container">
                               <div className="page-card">
-                                <div className="users-header">
+                                <div className="list-header">
                                   <div>
-                                    <h2 className="users-title">
+                                    <h2 className="list-title">
                                       Users Management
                                     </h2>
-                                    <p className="users-subtitle">
+                                    <p className="list-subtitle">
                                       Manage and organize your user accounts
                                     </p>
                                   </div>
                                   <button
-                                    className="users-add-btn"
+                                    className="list-add-btn"
                                     type="button"
                                     data-bs-toggle="modal"
                                     data-bs-target="#addUserModal"
@@ -464,10 +464,10 @@ export default function Users() {
                                     Add New User
                                   </button>
                                 </div>
-                                <div className="users-controls">
-                                  <div className="users-search-field">
+                                <div className="list-controls">
+                                  <div className="list-search-field">
                                     <label
-                                      className="users-label"
+                                      className="list-label"
                                       htmlFor="searchBy"
                                     >
                                       Search by:
@@ -475,7 +475,7 @@ export default function Users() {
                                     <select
                                       form="searchForm"
                                       name="searchBy"
-                                      className="users-select"
+                                      className="list-select"
                                       value={searchForm.searchBy}
                                       onChange={(event) => {
                                         setSearchForm((prev) => ({
@@ -497,15 +497,15 @@ export default function Users() {
                                   <Form
                                     id="searchForm"
                                     method="get"
-                                    className="users-searchbox"
+                                    className="list-searchbox"
                                   >
                                     <i
-                                      className="fa-solid fa-magnifying-glass users-input-icon"
+                                      className="fa-solid fa-magnifying-glass list-input-icon"
                                       aria-hidden="true"
                                     ></i>
                                     <input
                                       type="text"
-                                      className="users-input"
+                                      className="list-input"
                                       placeholder="Search..."
                                       name="searchValue"
                                       value={searchForm.searchValue || ""}
@@ -535,8 +535,8 @@ export default function Users() {
                                     />
                                   </Form>
                                 </div>
-                                <div className="users-table-wrap">
-                                  <table className="users-table">
+                                <div className="list-table-wrap">
+                                  <table className="list-table">
                                     <thead>
                                       <tr>
                                         <th>
@@ -714,8 +714,8 @@ export default function Users() {
                                     </tbody>
                                   </table>
                                 </div>
-                                <div className="users-pagination">
-                                  <div className="users-page-info">
+                                <div className="list-pagination">
+                                  <div className="list-page-info">
                                     Showing{" "}
                                     {Math.min(
                                       pagination.count === 0

@@ -15,7 +15,7 @@
 }
 
 /* Header section */
-.users-header {
+.list-header {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -27,19 +27,19 @@
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
 }
-.users-title {
+.list-title {
   margin: 0;
   font-size: 26px;
   font-weight: 700;
   color: #0f172a;
 }
-.users-subtitle {
+.list-subtitle {
   margin: 4px 0 0;
   font-size: 13px;
   color: #64748b;
 }
 
-.users-add-btn {
+.list-add-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -55,31 +55,31 @@
     box-shadow 160ms ease,
     background 160ms ease;
 }
-.users-add-btn:hover {
+.list-add-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 22px 34px rgba(37, 99, 235, 0.4);
   background: #1d4ed8;
 }
 
 /* Controls row */
-.users-controls {
+.list-controls {
   padding: 16px 24px;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
   align-items: center;
 }
-.users-search-field {
+.list-search-field {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.users-label {
+.list-label {
   font-size: 13px;
   font-weight: 600;
   color: #334155;
 }
-.users-select {
+.list-select {
   min-width: 160px;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
@@ -89,16 +89,16 @@
   padding: 8px 12px;
   outline: none;
 }
-.users-select:focus {
+.list-select:focus {
   border-color: #60a5fa;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
 
-.users-searchbox {
+.list-searchbox {
   position: relative;
   flex: 1 1 360px;
 }
-.users-input {
+.list-input {
   width: 100%;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
@@ -108,11 +108,11 @@
   padding: 10px 14px 10px 38px;
   outline: none;
 }
-.users-input:focus {
+.list-input:focus {
   border-color: #60a5fa;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
 }
-.users-input-icon {
+.list-input-icon {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -122,17 +122,17 @@
 }
 
 /* Table */
-.users-table-wrap {
+.list-table-wrap {
   padding: 0 24px 24px;
 }
-.users-table {
+.list-table {
   width: 100%;
   border-collapse: collapse;
 }
-.users-table thead tr {
+.list-table thead tr {
   border-bottom: 1px solid #e2e8f0;
 }
-.users-table th {
+.list-table th {
   text-align: left;
   padding: 12px 16px;
   font-size: 11px;
@@ -141,21 +141,24 @@
   color: #475569;
   font-weight: 700;
 }
-.users-table td {
+.list-table td {
   padding: 14px 16px;
   font-size: 13px;
   color: #334155;
 }
-.users-table tbody tr {
+.list-table tbody tr {
   transition: background 160ms ease;
   border-bottom: 1px solid #e2e8f0; /* light board under each row */
 }
-.users-table tbody tr:hover {
+.list-table tbody tr:last-child {
+  border-bottom: 0; /* remove light board on last row */
+}
+.list-table tbody tr:hover {
   background: rgba(241, 245, 249, 0.5);
 }
 
 /* Action icons */
-.users-actions {
+.list-actions {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -227,7 +230,7 @@
 }
 
 /* Pagination */
-.users-pagination {
+.list-pagination {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -237,7 +240,7 @@
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
 }
-.users-page-info {
+.list-page-info {
   font-size: 13px;
   color: #475569;
 }
@@ -294,20 +297,20 @@
     margin: 16px;
     border-radius: 14px;
   }
-  .users-header {
+  .list-header {
     padding: 16px;
   }
-  .users-controls {
+  .list-controls {
     padding: 12px 16px;
   }
-  .users-table-wrap {
+  .list-table-wrap {
     padding: 0 16px 16px;
     overflow-x: auto;
   }
-  .users-table {
+  .list-table {
     min-width: 700px;
   }
-  .users-pagination {
+  .list-pagination {
     padding: 12px 16px;
   }
 }
