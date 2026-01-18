@@ -198,6 +198,14 @@
   box-shadow: 0 10px 16px rgba(220, 38, 38, 0.18);
 }
 
+/* Privileges (lock) action */
+.action-icon.privileges:hover {
+  color: #7c3aed; /* purple-600 */
+  border-color: #e9d5ff; /* purple-200 */
+  background: #faf5ff; /* purple-50 */
+  box-shadow: 0 10px 16px rgba(124, 58, 237, 0.18);
+}
+
 /* Group pill */
 .group-pill {
   display: inline-flex;

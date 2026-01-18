@@ -1,3 +1,4 @@
+// user groups
 import React, { Suspense, useEffect, useState } from "react";
 import {
   Form,
@@ -200,6 +201,7 @@ export default function UserGroups() {
   };
   const [modulePrivileges, setModulePrivileges] = useState([]);
   const [resetMP, setResetMP] = useState(false);
+
   useEffect(() => {
     setSearchForm(() => {
       return {
@@ -318,86 +320,87 @@ export default function UserGroups() {
                     }
 
                     const dataGrid = objects.map((userGroup) => {
+                      const ug = (userGroup.userGroupDescription || "").toUpperCase();
+                      const pillClass = ug.includes("ADMIN")
+                        ? "group-admin"
+                        : ug.includes("MANAGER")
+                          ? "group-manager"
+                          : ug.includes("MODERATOR")
+                            ? "group-moderator"
+                            : "group-user";
                       return (
                         <tr key={userGroup.userGroupId}>
-                          <td className="text-truncate">
-                            {userGroup.userGroupId}
-                          </td>
-                          <td className="text-truncate">
-                            {userGroup.userGroupDescription}
-                          </td>
-                          <td className="text-truncate">
-                            {userGroup.numberOfUsers}
+                          <td>
+                            <strong>{userGroup.userGroupId}</strong>
                           </td>
                           <td>
-                            <div className="row">
-                              <div className="col col-2">
+                            <span className={`group-pill ${pillClass}`}>
+                              {userGroup.userGroupDescription}
+                            </span>
+                          </td>
+                          <td>{userGroup.numberOfUsers}</td>
+                          <td>
+                            <div className="list-actions">
+                              <button
+                                type="button"
+                                className="action-icon view"
+                                title="View"
+                                data-bs-toggle="modal"
+                                data-bs-target="#viewUserGroupModal"
+                                disabled={!userGroup.authorities.view}
+                                value={userGroup.userId}
+                                onClick={() =>
+                                  loadModalData(userGroup.userGroupId)
+                                }
+                              >
+                                <i className="fa-solid fa-eye"></i>
+                              </button>
+                              <Form
+                                method="get"
+                                action={`/privileges/${userGroup.userGroupId}`}
+                                state={{
+                                  search: `?${searchParams.toString()}`,
+                                }}
+                                style={{ display: "inline" }}
+                              >
                                 <button
-                                  type="button"
-                                  className="action-btn"
-                                  title="View"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#viewUserGroupModal"
-                                  disabled={!userGroup.authorities.view}
+                                  type="submit"
+                                  className="action-icon privileges"
+                                  title="Privileges"
+                                  disabled={!userGroup.authorities.privileges}
                                   value={userGroup.userId}
-                                  onClick={() =>
-                                    loadModalData(userGroup.userGroupId)
-                                  }
                                 >
-                                  <i className="fa-sharp fa-solid fa-eye"></i>
+                                  <i className="fa-solid fa-user-lock"></i>
                                 </button>
-                              </div>
-                              <div className="col col-2">
-                                <Form
-                                  method="get"
-                                  action={`/privileges/${userGroup.userGroupId}`}
-                                  state={{
-                                    search: `?${searchParams.toString()}`,
-                                  }}
-                                >
-                                  <button
-                                    type="submit"
-                                    className="action-btn"
-                                    title="Privileges"
-                                    disabled={!userGroup.authorities.privileges}
-                                    value={userGroup.userId}
-                                  >
-                                    <i className="fa-sharp fa-solid fa-user-lock"></i>
-                                  </button>
-                                </Form>
-                              </div>
-                              <div className="col col-2">
-                                <button
-                                  type="button"
-                                  className="action-btn"
-                                  title="Edit"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#editUserGroupModal"
-                                  disabled={!userGroup.authorities.delete}
-                                  value={userGroup.userId}
-                                  onClick={() =>
-                                    loadModalData(userGroup.userGroupId)
-                                  }
-                                >
-                                  <i className="fa-sharp fa-solid fa-pen"></i>
-                                </button>
-                              </div>
-                              <div className="col col-2">
-                                <button
-                                  type="button"
-                                  className="action-btn delete-btn"
-                                  title="Delete"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#deleteUserGroupModal"
-                                  disabled={!userGroup.authorities.view}
-                                  value={userGroup.userId}
-                                  onClick={() =>
-                                    loadModalData(userGroup.userGroupId)
-                                  }
-                                >
-                                  <i className="fa-sharp fa-solid fa-trash"></i>
-                                </button>
-                              </div>
+                              </Form>
+                              <button
+                                type="button"
+                                className="action-icon edit"
+                                title="Edit"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editUserGroupModal"
+                                disabled={!userGroup.authorities.edit}
+                                value={userGroup.userId}
+                                onClick={() =>
+                                  loadModalData(userGroup.userGroupId)
+                                }
+                              >
+                                <i className="fa-solid fa-pen"></i>
+                              </button>
+                              <button
+                                type="button"
+                                className="action-icon delete"
+                                title="Delete"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteUserGroupModal"
+                                disabled={!userGroup.authorities.delete}
+                                value={userGroup.userId}
+                                onClick={() =>
+                                  loadModalData(userGroup.userGroupId)
+                                }
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -455,916 +458,339 @@ export default function UserGroups() {
 
                     return (
                       <>
-                        <section>
+                        <section className="secondary-page">
                           <div className="content">
                             <div className="container">
-                              <div className="row pt-3 mb-3 align-items-center user-content">
-                                <div className="col">
-                                  <h4 className="page-header  user-heading">
-                                    User Groups Management
-                                  </h4>
-                                </div>
-                                <div className="col text-end add-btn">
+                              <div className="page-card">
+                                <div className="list-header">
+                                  <div>
+                                    <h2 className="list-title">
+                                      User Groups Management
+                                    </h2>
+                                    <p className="list-subtitle">
+                                      Manage and organize user group permissions
+                                    </p>
+                                  </div>
                                   <button
+                                    className="list-add-btn"
                                     type="button"
-                                    className="btn btn-theme btn-sm"
                                     data-bs-toggle="modal"
                                     data-bs-target="#addUserGroupModal"
                                     disabled={!authorities.add}
                                     onClick={clearModalData}
                                   >
-                                    &nbsp;
-                                    <i className="fa-sharp fa-solid fa-circle-plus"></i>
-                                    &nbsp;&nbsp;Add&nbsp;New&nbsp;User&nbsp;Group&nbsp;&nbsp;&nbsp;
+                                    <i className="fa-solid fa-users-plus"></i>
+                                    Add New User Group
                                   </button>
                                 </div>
-                              </div>
-                              <div className="row justify-content-end mb-3">
-                                <div className="col col-xxl-3">
-                                  <div className="row align-items-center">
-                                    <div className="col search-by-col-1 text-end">
-                                      <label
-                                        className="fw-bold"
-                                        htmlFor="searchBy"
-                                      >
-                                        Search by:{" "}
-                                      </label>
-                                    </div>
-                                    <div className="col col-sm-4 search-by-col-2">
-                                      <select
-                                        form="searchForm"
-                                        name="searchBy"
-                                        className="form-select form-select-sm form-select-mod"
-                                        value={searchForm.searchBy}
-                                        onChange={(event) => {
-                                          setSearchForm((prevSearchForm) => {
-                                            return {
-                                              ...prevSearchForm,
-                                              searchBy: event.target.value,
-                                            };
-                                          });
-                                        }}
-                                      >
-                                        <option value="userGroupId">
-                                          User Group ID
-                                        </option>
-                                        <option value="userGroupDescription">
-                                          User Group Name
-                                        </option>
-                                      </select>
-                                    </div>
+                                <div className="list-controls">
+                                  <div className="list-search-field">
+                                    <label
+                                      className="list-label"
+                                      htmlFor="searchBy"
+                                    >
+                                      Search by:
+                                    </label>
+                                    <select
+                                      form="searchForm"
+                                      name="searchBy"
+                                      className="list-select"
+                                      value={searchForm.searchBy}
+                                      onChange={(event) => {
+                                        setSearchForm((prev) => ({
+                                          ...prev,
+                                          searchBy: event.target.value,
+                                        }));
+                                      }}
+                                    >
+                                      <option value="userGroupId">
+                                        User Group ID
+                                      </option>
+                                      <option value="userGroupDescription">
+                                        User Group Name
+                                      </option>
+                                    </select>
                                   </div>
-                                </div>
-                                <div className="col col-md-3">
                                   <Form
                                     id="searchForm"
-                                    className="d-flex"
                                     method="get"
+                                    className="list-searchbox"
                                   >
-                                    <div className="input-group input-group-sm">
-                                      <input
-                                        type="text"
-                                        className="form-control form-control-sm input-group-control-mod form-input-mod"
-                                        placeholder="Search..."
-                                        aria-describedby="basic-addon2"
-                                        name="searchValue"
-                                        value={searchForm.searchValue || ""}
-                                        onChange={(event) => {
-                                          setSearchForm((prevSearchForm) => {
-                                            return {
-                                              ...prevSearchForm,
-                                              searchValue: validateInputText(
-                                                event.target.value,
-                                              ),
-                                            };
-                                          });
-                                        }}
-                                      />
-                                      <span
-                                        className="input-group-text input-group-text-mod form-input-mod"
-                                        id="basic-addon2"
-                                      >
-                                        <button
-                                          className="action-btn"
-                                          type="submit"
-                                          onClick={() => {
-                                            setSearchForm((prevSearchForm) => {
-                                              return {
-                                                ...prevSearchForm,
-                                                sortType: "created",
-                                                sortOrder: "desc",
-                                                page: "1",
-                                              };
-                                            });
-                                          }}
-                                        >
-                                          <i className="fa-sharp fa-solid fa-magnifying-glass fa-sm"></i>
-                                        </button>
-                                        <input
-                                          type="hidden"
-                                          name="sortType"
-                                          value={searchForm.sortType || ""}
-                                        />
-                                        <input
-                                          type="hidden"
-                                          name="sortOrder"
-                                          value={searchForm.sortOrder || ""}
-                                        />
-                                        <input
-                                          type="hidden"
-                                          name="page"
-                                          value={searchForm.page || ""}
-                                        />
-                                      </span>
-                                    </div>
+                                    <i
+                                      className="fa-solid fa-magnifying-glass list-input-icon"
+                                      aria-hidden="true"
+                                    ></i>
+                                    <input
+                                      type="text"
+                                      className="list-input"
+                                      placeholder="Search..."
+                                      name="searchValue"
+                                      value={searchForm.searchValue || ""}
+                                      onChange={(event) => {
+                                        setSearchForm((prev) => ({
+                                          ...prev,
+                                          searchValue: validateInputText(
+                                            event.target.value,
+                                          ),
+                                        }));
+                                      }}
+                                    />
+                                    <input
+                                      type="hidden"
+                                      name="sortType"
+                                      value={searchForm.sortType || ""}
+                                    />
+                                    <input
+                                      type="hidden"
+                                      name="sortOrder"
+                                      value={searchForm.sortOrder || ""}
+                                    />
+                                    <input
+                                      type="hidden"
+                                      name="page"
+                                      value={searchForm.page || ""}
+                                    />
                                   </Form>
                                 </div>
-                              </div>
-                              <div className="row table-row mb-3">
-                                <div className="col table-responsive bg-theme-1 border rounded table-container">
-                                  <table className="table table-hover">
+                                <div className="list-table-wrap">
+                                  <table className="list-table">
                                     <thead>
                                       <tr>
                                         <th>
-                                          <div className="row table-heading align-items-center">
-                                            <div className="col table-heading-title">
-                                              User&nbsp;Group&nbsp;ID
-                                            </div>
-                                            <div className="col sort-caret">
-                                              <button
-                                                type="submit"
-                                                form="searchForm"
-                                                onClick={() => {
-                                                  setSearchForm(
-                                                    (prevSearchForm) => {
-                                                      const sortOrder =
-                                                        prevSearchForm.sortType ===
-                                                        "UserGroupId"
-                                                          ? prevSearchForm.sortOrder ===
-                                                            "desc"
-                                                            ? "asc"
-                                                            : "desc"
-                                                          : "asc";
-                                                      return {
-                                                        ...prevSearchForm,
-                                                        sortType: "UserGroupId",
-                                                        sortOrder: sortOrder,
-                                                      };
-                                                    },
-                                                  );
-                                                }}
-                                                className="sort-btn"
-                                              >
-                                                <i
-                                                  className={`fa-sharp fa-solid ${
-                                                    searchForm.sortType ===
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              justifyContent: "space-between",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <span>User Group ID</span>
+                                            <button
+                                              type="submit"
+                                              form="searchForm"
+                                              className="action-icon view"
+                                              title="Sort"
+                                              onClick={() => {
+                                                setSearchForm((prev) => {
+                                                  const sortOrder =
+                                                    prev.sortType ===
                                                     "UserGroupId"
-                                                      ? searchForm.sortOrder ===
-                                                        "asc"
-                                                        ? "fa-caret-up"
-                                                        : "fa-caret-down"
-                                                      : "fa-sort"
-                                                  }`}
-                                                ></i>
-                                              </button>
-                                            </div>
+                                                      ? prev.sortOrder ===
+                                                        "desc"
+                                                        ? "asc"
+                                                        : "desc"
+                                                      : "asc";
+                                                  return {
+                                                    ...prev,
+                                                    sortType: "UserGroupId",
+                                                    sortOrder,
+                                                  };
+                                                });
+                                              }}
+                                            >
+                                              <i
+                                                className={`fa-solid ${searchForm.sortType === "UserGroupId" ? (searchForm.sortOrder === "asc" ? "fa-caret-up" : "fa-caret-down") : "fa-sort"}`}
+                                              ></i>
+                                            </button>
                                           </div>
                                         </th>
                                         <th>
-                                          <div className="row table-heading align-items-center">
-                                            <div className="col table-heading-title">
-                                              User&nbsp;Group&nbsp;Name
-                                            </div>
-                                            <div className="col sort-caret">
-                                              <button
-                                                type="submit"
-                                                form="searchForm"
-                                                onClick={() => {
-                                                  setSearchForm(
-                                                    (prevSearchForm) => {
-                                                      const sortOrder =
-                                                        prevSearchForm.sortType ===
-                                                        "userGroupDescription"
-                                                          ? prevSearchForm.sortOrder ===
-                                                            "desc"
-                                                            ? "asc"
-                                                            : "desc"
-                                                          : "asc";
-                                                      return {
-                                                        ...prevSearchForm,
-                                                        sortType:
-                                                          "userGroupDescription",
-                                                        sortOrder: sortOrder,
-                                                      };
-                                                    },
-                                                  );
-                                                }}
-                                                className="sort-btn"
-                                              >
-                                                <i
-                                                  className={`fa-sharp fa-solid ${
-                                                    searchForm.sortType ===
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              justifyContent: "space-between",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <span>User Group Name</span>
+                                            <button
+                                              type="submit"
+                                              form="searchForm"
+                                              className="action-icon view"
+                                              title="Sort"
+                                              onClick={() => {
+                                                setSearchForm((prev) => {
+                                                  const sortOrder =
+                                                    prev.sortType ===
                                                     "userGroupDescription"
-                                                      ? searchForm.sortOrder ===
-                                                        "asc"
-                                                        ? "fa-caret-up"
-                                                        : "fa-caret-down"
-                                                      : "fa-sort"
-                                                  }`}
-                                                ></i>
-                                              </button>
-                                            </div>
+                                                      ? prev.sortOrder ===
+                                                        "desc"
+                                                        ? "asc"
+                                                        : "desc"
+                                                      : "asc";
+                                                  return {
+                                                    ...prev,
+                                                    sortType:
+                                                      "userGroupDescription",
+                                                    sortOrder,
+                                                  };
+                                                });
+                                              }}
+                                            >
+                                              <i
+                                                className={`fa-solid ${searchForm.sortType === "userGroupDescription" ? (searchForm.sortOrder === "asc" ? "fa-caret-up" : "fa-caret-down") : "fa-sort"}`}
+                                              ></i>
+                                            </button>
                                           </div>
                                         </th>
                                         <th>
-                                          <div className="row table-heading align-items-center">
-                                            <div className="col table-heading-title">
-                                              Number&nbsp;of&nbsp;Users
-                                            </div>
-                                            <div className="col sort-caret">
-                                              <button
-                                                type="submit"
-                                                form="searchForm"
-                                                onClick={() => {
-                                                  setSearchForm(
-                                                    (prevSearchForm) => {
-                                                      const sortOrder =
-                                                        prevSearchForm.sortType ===
-                                                        "numberOfUsers"
-                                                          ? prevSearchForm.sortOrder ===
-                                                            "desc"
-                                                            ? "asc"
-                                                            : "desc"
-                                                          : "asc";
-                                                      return {
-                                                        ...prevSearchForm,
-                                                        sortType:
-                                                          "numberOfUsers",
-                                                        sortOrder: sortOrder,
-                                                      };
-                                                    },
-                                                  );
-                                                }}
-                                                className="sort-btn"
-                                              >
-                                                <i
-                                                  className={`fa-sharp fa-solid ${
-                                                    searchForm.sortType ===
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              justifyContent: "space-between",
+                                              alignItems: "center",
+                                            }}
+                                          >
+                                            <span>Number of Users</span>
+                                            <button
+                                              type="submit"
+                                              form="searchForm"
+                                              className="action-icon view"
+                                              title="Sort"
+                                              onClick={() => {
+                                                setSearchForm((prev) => {
+                                                  const sortOrder =
+                                                    prev.sortType ===
                                                     "numberOfUsers"
-                                                      ? searchForm.sortOrder ===
-                                                        "asc"
-                                                        ? "fa-caret-up"
-                                                        : "fa-caret-down"
-                                                      : "fa-sort"
-                                                  }`}
-                                                ></i>
-                                              </button>
-                                            </div>
+                                                      ? prev.sortOrder ===
+                                                        "desc"
+                                                        ? "asc"
+                                                        : "desc"
+                                                      : "asc";
+                                                  return {
+                                                    ...prev,
+                                                    sortType: "numberOfUsers",
+                                                    sortOrder,
+                                                  };
+                                                });
+                                              }}
+                                            >
+                                              <i
+                                                className={`fa-solid ${searchForm.sortType === "numberOfUsers" ? (searchForm.sortOrder === "asc" ? "fa-caret-up" : "fa-caret-down") : "fa-sort"}`}
+                                              ></i>
+                                            </button>
                                           </div>
                                         </th>
                                         <th>Action</th>
                                       </tr>
                                     </thead>
-                                    <tbody>{dataGridOffset(dataGrid)}</tbody>
+                                    <tbody>
+                                      {objects.length > 0
+                                        ? dataGridOffset(dataGrid)
+                                        : null}
+                                      {objects.length === 0 && (
+                                        <tr>
+                                          <td
+                                            colSpan="4"
+                                            style={{
+                                              textAlign: "center",
+                                              padding: "24px",
+                                            }}
+                                          >
+                                            <span style={{ color: "#64748b" }}>
+                                              No user groups found
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      )}
+                                    </tbody>
                                   </table>
                                 </div>
-                              </div>
-                              <div className="col">
-                                <nav>
-                                  <ul className="pagination pagination-sm justify-content-end align-items-center pagination-color-fix">
-                                    <li className="page-item">
-                                      <button
-                                        type="submit"
-                                        form="searchForm"
-                                        className="page-link"
-                                        onClick={() => {
-                                          setSearchForm((prevSearchForm) => {
-                                            const page = (
-                                              pagination.page - 1
-                                            ).toString();
-                                            return {
-                                              ...prevSearchForm,
-                                              page: page,
-                                            };
-                                          });
-                                        }}
-                                        value={pagination.page - 1}
-                                        disabled={pagination.page === 1}
-                                      >
-                                        Previous
-                                      </button>
-                                    </li>
-                                    <li className="page-item">
-                                      <span className="active-page border-top border-bottom">
-                                        {pagination.page}
-                                      </span>
-                                    </li>
-                                    <li className="page-item">
-                                      <button
-                                        type="submit"
-                                        form="searchForm"
-                                        onClick={() => {
-                                          setSearchForm((prevSearchForm) => {
-                                            const page = (
-                                              pagination.page + 1
-                                            ).toString();
-                                            return {
-                                              ...prevSearchForm,
-                                              page: page,
-                                            };
-                                          });
-                                        }}
-                                        className="page-link"
-                                        disabled={
-                                          10 * pagination.page >=
-                                          pagination.count
-                                        }
-                                      >
-                                        Next
-                                      </button>
-                                    </li>
-                                  </ul>
-                                </nav>
+                                <div className="list-pagination">
+                                  <div className="list-page-info">
+                                    Showing{" "}
+                                    {Math.min(
+                                      pagination.count === 0
+                                        ? 0
+                                        : (pagination.page - 1) * 10 + 1,
+                                      pagination.count,
+                                    )}{" "}
+                                    -{" "}
+                                    {Math.min(
+                                      10 * pagination.page,
+                                      pagination.count,
+                                    )}{" "}
+                                    of {pagination.count} Results
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "8px",
+                                    }}
+                                  >
+                                    <button
+                                      type="submit"
+                                      form="searchForm"
+                                      className="page-btn"
+                                      onClick={() => {
+                                        setSearchForm((prev) => ({
+                                          ...prev,
+                                          page: (
+                                            pagination.page - 1
+                                          ).toString(),
+                                        }));
+                                      }}
+                                      disabled={pagination.page === 1}
+                                    >
+                                      Previous
+                                    </button>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "6px",
+                                      }}
+                                    >
+                                      {Array.from(
+                                        {
+                                          length: Math.max(
+                                            1,
+                                            Math.ceil(pagination.count / 10),
+                                          ),
+                                        },
+                                        (_, i) => i + 1,
+                                      ).map((page) => (
+                                        <button
+                                          key={page}
+                                          type="submit"
+                                          form="searchForm"
+                                          onClick={() => {
+                                            setSearchForm((prev) => ({
+                                              ...prev,
+                                              page: page.toString(),
+                                            }));
+                                          }}
+                                          className={`page-number ${pagination.page === page ? "active" : ""}`}
+                                        >
+                                          {page}
+                                        </button>
+                                      ))}
+                                    </div>
+                                    <button
+                                      type="submit"
+                                      form="searchForm"
+                                      className="page-btn"
+                                      onClick={() => {
+                                        setSearchForm((prev) => ({
+                                          ...prev,
+                                          page: (
+                                            pagination.page + 1
+                                          ).toString(),
+                                        }));
+                                      }}
+                                      disabled={
+                                        10 * pagination.page >= pagination.count
+                                      }
+                                    >
+                                      Next
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </section>
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="viewUserGroupModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
-                                <div>
-                                  <h4 className="page-header">
-                                    User Groups Management | View
-                                  </h4>
-                                </div>
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <table className="table table-hover">
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            User Group ID
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.userGroupId}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            User Group Name
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.userGroupDescription}
-                                      </td>
-                                    </tr>
-
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.created}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.createdBy}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last Modified Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModified}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last modified By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModifiedBy}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="deleteUserGroupModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
-                                <div>
-                                  <h4 className="page-header">
-                                    User Groups Management | Confirm Delete
-                                  </h4>
-                                </div>
-                                <button
-                                  type="button"
-                                  id="deleteUserGroupModalClose"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                  disabled={navigation.state === "submitting"}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <table className="table table-hover">
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            User Group ID
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.userGroupId}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            User Group Name
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.userGroupDescription}
-                                      </td>
-                                    </tr>
-
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.created}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.createdBy}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last Modified Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModified}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last modified By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModifiedBy}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              <div className="modal-footer">
-                                <div className="col text-end add-btn pe-2">
-                                  <Form method="post">
-                                    <input
-                                      type="hidden"
-                                      name="formType"
-                                      value="deleteUserGroup"
-                                      readOnly={true}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="userGroupId"
-                                      value={modal.userGroupId}
-                                      readOnly={true}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="batchNo"
-                                      value={modal.batchNo}
-                                      readOnly={true}
-                                    />
-                                    <button
-                                      type="submit"
-                                      className="btn btn-theme-delete btn-sm"
-                                      disabled={
-                                        navigation.state === "submitting"
-                                      }
-                                    >
-                                      &nbsp;
-                                      <i className="fa-sharp fa-solid fa-trash"></i>
-                                      &nbsp;&nbsp;{" "}
-                                      {navigation.state === "submitting"
-                                        ? "Submitting..."
-                                        : "Delete User Group"}
-                                      &nbsp;&nbsp;&nbsp;
-                                    </button>
-                                  </Form>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Add Modal */}
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="addUserGroupModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
-                                <div>
-                                  <h4 className="page-header">
-                                    User Groups Management | Add
-                                  </h4>
-                                </div>
-                                <button
-                                  type="button"
-                                  className="btn-close"
-                                  id="addModalClose"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                  disabled={navigation.state === "submitting"}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <Form id="addUserGroupForm" method="post">
-                                  <div className="mb-3">
-                                    <label
-                                      htmlFor="adduserGroupDescription"
-                                      className="form-label fw-bold"
-                                    >
-                                      User Group Name
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="form-control form-input-mod"
-                                      id="adduserGroupDescription"
-                                      name="userGroupDescription"
-                                      disabled={
-                                        navigation.state === "submitting"
-                                      }
-                                      value={modal.userGroupDescription}
-                                      onChange={(event) => {
-                                        setModal((prevModal) => {
-                                          return {
-                                            ...prevModal,
-                                            userGroupDescription:
-                                              validateInputText(
-                                                event.target.value,
-                                              ),
-                                          };
-                                        });
-                                      }}
-                                    />
-                                    {errors.add.adduserGroupDescriptionError &&
-                                      errors.add.adduserGroupDescriptionError
-                                        .length > 0 && (
-                                        <div className="text-danger">
-                                          {
-                                            errors.add
-                                              .adduserGroupDescriptionError[0]
-                                              .message
-                                          }
-                                        </div>
-                                      )}
-                                  </div>
-                                  <div className="mb-3">
-                                    <label
-                                      htmlFor="adduserGroupAccessDuration"
-                                      className="form-label fw-bold"
-                                    >
-                                      Access Duration
-                                    </label>
-                                    <div className="input-group">
-                                      <input
-                                        type="number"
-                                        className="form-control input-group-control input-group-control-mod form-input-mod"
-                                        id="adduserGroupAccessDuration"
-                                        name="accessDuration"
-                                        min="0"
-                                        step="1"
-                                        disabled={
-                                          navigation.state === "submitting"
-                                        }
-                                        value={modal.accessDuration}
-                                        onChange={(event) => {
-                                          setModal((prevModal) => {
-                                            return {
-                                              ...prevModal,
-                                              accessDuration:
-                                                event.target.value,
-                                            };
-                                          });
-                                        }}
-                                      />
-                                      <span className="input-group-text input-group-text-mod form-input-mod">
-                                        minutes
-                                      </span>
-                                    </div>
-                                    {errors.add.addAccessDurationError &&
-                                      errors.add.addAccessDurationError.length >
-                                        0 && (
-                                        <div className="text-danger">
-                                          {
-                                            errors.add.addAccessDurationError[0]
-                                              .message
-                                          }
-                                        </div>
-                                      )}
-                                  </div>
-                                  <table className="table table-hover">
-                                    <thead>
-                                      <tr>
-                                        <th>
-                                          <div className="row table-heading align-items-center">
-                                            <div className="col table-heading-title">
-                                              Module
-                                            </div>
-                                          </div>
-                                        </th>
-                                        <th>
-                                          <div className="row table-heading align-items-center table-heading-title">
-                                            Privileges Granted
-                                          </div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>{modulePrivilegesChecklist}</tbody>
-                                  </table>
-                                  <input
-                                    type="hidden"
-                                    name="formType"
-                                    value="addUserGroup"
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="modulePrivileges"
-                                    value={JSON.stringify(modulePrivileges)}
-                                  />
-                                </Form>
-                              </div>
-                              <div className="modal-footer">
-                                <div className="col text-end add-btn pe-2">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-theme btn-sm"
-                                    form="addUserGroupForm"
-                                    disabled={navigation.state === "submitting"}
-                                  >
-                                    &nbsp;
-                                    <i className="fa-sharp fa-solid fa-circle-plus"></i>
-                                    &nbsp;&nbsp;{" "}
-                                    {navigation.state === "submitting"
-                                      ? "Submitting..."
-                                      : "Add New User Group"}
-                                    &nbsp;&nbsp;&nbsp;
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Edit Modal */}
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="editUserGroupModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
-                                <div>
-                                  <h4 className="page-header">
-                                    User Groups Management | Edit
-                                  </h4>
-                                </div>
-                                <button
-                                  type="button"
-                                  id="editUseGrouprModalClose"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                  disabled={navigation.state === "submitting"}
-                                ></button>
-                              </div>
-                              <div className="modal-body">
-                                <Form id="editUserGroupForm" method="post">
-                                  <div className="mb-3">
-                                    <label
-                                      htmlFor="edituserGroupDescription"
-                                      className="form-label fw-bold"
-                                    >
-                                      User Group Name
-                                    </label>
-                                    <input
-                                      type="text"
-                                      className="form-control form-input-mod"
-                                      id="edituserGroupDescription"
-                                      name="userGroupDescription"
-                                      value={modal.userGroupDescription}
-                                      disabled={
-                                        navigation.state === "submitting"
-                                      }
-                                      onChange={(event) => {
-                                        setModal((prevModal) => ({
-                                          ...prevModal,
-                                          userGroupDescription:
-                                            validateInputText(
-                                              event.target.value,
-                                            ),
-                                          hidden: {
-                                            ...prevModal.hidden,
-                                          },
-                                          static: {
-                                            ...prevModal.static,
-                                          },
-                                        }));
-                                      }}
-                                    />
-                                    {errors.edit
-                                      .edituserGroupDescriptionError &&
-                                      errors.edit.edituserGroupDescriptionError
-                                        .length > 0 && (
-                                        <div className="text-danger">
-                                          {
-                                            errors.edit
-                                              .edituserGroupDescriptionError[0]
-                                              .message
-                                          }
-                                        </div>
-                                      )}
-                                  </div>
-                                  <div className="mb-3">
-                                    <label
-                                      htmlFor="edituserGroupAccessDuration"
-                                      className="form-label fw-bold"
-                                    >
-                                      Access Duration
-                                    </label>
-                                    <div className="input-group">
-                                      <input
-                                        type="number"
-                                        className="form-control input-group-control input-group-control-mod form-input-mod"
-                                        id="edituserGroupAccessDuration"
-                                        name="accessDuration"
-                                        min="0"
-                                        step="1"
-                                        disabled={
-                                          navigation.state === "submitting"
-                                        }
-                                        value={modal.accessDuration}
-                                        onChange={(event) => {
-                                          setModal((prevModal) => {
-                                            return {
-                                              ...prevModal,
-                                              accessDuration:
-                                                event.target.value,
-                                            };
-                                          });
-                                        }}
-                                      />
-                                      <span className="input-group-text input-group-text-mod form-input-mod">
-                                        minutes
-                                      </span>
-                                    </div>
-                                    {errors.edit.editAccessDurationError &&
-                                      errors.edit.editAccessDurationError
-                                        .length > 0 && (
-                                        <div className="text-danger">
-                                          {
-                                            errors.edit
-                                              .editAccessDurationError[0]
-                                              .message
-                                          }
-                                        </div>
-                                      )}
-                                  </div>
-
-                                  <input
-                                    type="hidden"
-                                    name="formType"
-                                    value="editUserGroup"
-                                    readOnly={true}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="userGroupId"
-                                    value={modal.userGroupId}
-                                    readOnly={true}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="batchNo"
-                                    value={modal.batchNo}
-                                    readOnly={true}
-                                  />
-                                </Form>
-                              </div>
-                              <div className="modal-footer">
-                                <div className="col text-end add-btn pe-2">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-theme btn-sm"
-                                    form="editUserGroupForm"
-                                    disabled={navigation.state === "submitting"}
-                                  >
-                                    &nbsp;
-                                    <i className="fa-sharp fa-solid fa-pen"></i>
-                                    &nbsp;&nbsp;{" "}
-                                    {navigation.state === "submitting"
-                                      ? "Submitting..."
-                                      : "Edit User Group"}
-                                    &nbsp;&nbsp;&nbsp;
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        {/* Global toasts are rendered by SecondaryLayout via ToastBus */}
                       </>
                     );
                   }}
