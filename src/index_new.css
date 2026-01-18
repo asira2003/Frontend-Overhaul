@@ -140,14 +140,7 @@ body {
   }
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .toast-container {
-    left: 1rem;
-    right: 1rem;
-    min-width: auto;
-  }
-}
+/* (breakpoints moved to index-breakpoints.css) */
 
 /* footer */
 .footer {
@@ -224,11 +217,7 @@ body {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .throbber-spinner {
-    animation: none;
-  }
-}
+/* (breakpoints moved to index-breakpoints.css) */
 
 /* Fullscreen throbber overlay */
 .fullscreen-throbber {
@@ -271,38 +260,128 @@ body {
   font-size: 0.95rem;
 }
 
-/* Footer responsive (tablet and up) */
-@media (min-width: 768px) {
-  .footer {
-    padding: 1rem 2rem;
-    text-align: left;
-  }
+/* (breakpoints moved to index-breakpoints.css) */
 
-  .footer-container {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
+/* (breakpoints moved to index-breakpoints.css) */
 
-  .footer-container p {
-    font-size: 0.95rem;
-  }
-
-  .footer .sirima-footer {
-    color: #4b5563;
-    font-weight: 500;
-  }
+/* secondary header (mobile-first) */
+.secondary-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Large desktop refinements */
-@media (min-width: 1200px) {
-  .footer {
-    padding: 1.25rem 2.5rem;
-  }
-  .footer-container p {
-    font-size: 1rem;
-  }
+.secondary-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.brand-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+.brand-name {
+  display: none;
+  font-weight: 600;
+  color: #111827;
+}
+
+.secondary-actions {
+  position: relative;
+}
+.profile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  cursor: pointer;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.08s ease;
+}
+.profile-button:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+.profile-button:active {
+  transform: scale(0.98);
+}
+.profile-button.open {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+.avatar {
+  font-size: 1.25rem;
+  color: #2563eb;
+}
+.profile-name {
+  display: none;
+  font-weight: 600;
+}
+
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 220px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  padding: 0.5rem;
+}
+.profile-meta {
+  padding: 0.25rem 0.5rem;
+}
+.profile-meta .email {
+  font-size: 0.85rem;
+  color: #374151;
+  font-weight: 600;
+}
+.profile-meta .group {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+.profile-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 0.5rem 0;
+}
+.profile-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.profile-item:hover {
+  background: #f3f4f6;
+}
+.profile-item i {
+  font-size: 1rem;
+  color: #374151;
+}
+.profile-item span {
+  font-size: 0.9rem;
+  color: #111827;
+  font-weight: 600;
+}
+.profile-item.danger i {
+  color: #ef4444;
+}
+.profile-item.danger span {
+  color: #b91c1c;
 }

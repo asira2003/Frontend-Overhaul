@@ -1,0 +1,82 @@
+/* Consolidated responsive breakpoints and media queries */
+
+/* Toast: small screens */
+@media (max-width: 640px) {
+  .toast-container {
+    left: 1rem;
+    right: 1rem;
+    min-width: auto;
+  }
+}
+
+/* Motion reduction: throbber animation */
+@media (prefers-reduced-motion: reduce) {
+  .throbber-spinner {
+    animation: none;
+  }
+}
+
+/* Footer: tablet and up */
+@media (min-width: 768px) {
+  .footer {
+    padding: 1rem 2rem;
+    text-align: left;
+  }
+  .footer-container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .footer-container p {
+    font-size: 0.95rem;
+  }
+  .footer .sirima-footer {
+    color: #4b5563;
+    font-weight: 500;
+  }
+}
+
+/* Footer: large desktop */
+@media (min-width: 1200px) {
+  .footer {
+    padding: 1.25rem 2.5rem;
+  }
+  .footer-container p {
+    font-size: 1rem;
+  }
+}
+
+/* Secondary header: tablet and up */
+@media (min-width: 768px) {
+  .secondary-header {
+    padding: 0.75rem 1rem;
+  }
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+  .brand-name {
+    display: inline;
+    font-size: 1rem;
+  }
+  .profile-name {
+    display: inline;
+  }
+}
+
+/* Secondary header: large desktop */
+@media (min-width: 1200px) {
+  .secondary-header {
+    padding: 0.85rem 1.25rem;
+  }
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .brand-name {
+    font-size: 1.0625rem;
+  }
+}

@@ -6,6 +6,7 @@ import "./assets/Box-Icons/css/boxicons.min.css";
 import "./assets/Remix-Icons/remixicon.css";
 
 import "./index_new.css";
+import "./index-breakpoints.css";
 import "./login-page.css";
 import "./login-page-breakpoints.css";
 // import "./index.css";
