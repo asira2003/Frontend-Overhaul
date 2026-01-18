@@ -22,6 +22,7 @@ import {
   validateInputText,
   validateInputTextNoUpperCase,
 } from "../../utils/StringUtils";
+import { pushToast } from "../../utils/ToastBus";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -244,7 +245,6 @@ export default function Users() {
     },
   };
   const navigation = useNavigation();
-  const [toasts, setToasts] = useState([]);
   useEffect(() => {
     if (
       response !== undefined &&
@@ -271,17 +271,9 @@ export default function Users() {
         }, 500);
       }
     }
-    setToasts((prevToasts) => {
-      const newTosts = prevToasts.map((x) => x);
-      newTosts.unshift(
-        <ServerMessageToast
-          key={prevToasts.length + 1}
-          message={response?.message}
-          id={prevToasts.length + 1}
-        />,
-      );
-      return newTosts;
-    });
+    if (response?.message) {
+      pushToast(response.message);
+    }
   }, [response]);
 
   function clearModalData() {
@@ -810,9 +802,7 @@ export default function Users() {
                           </div>
                         </section>
 
-                        <div className="toast-container toast-positioner">
-                          {toasts}
-                        </div>
+                        {/* Global toasts are rendered in layout via ToastBus */}
                       </>
                     );
                   }}

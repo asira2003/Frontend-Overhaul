@@ -20,6 +20,7 @@ import {
 } from "../../api/administration/userGroupsApi";
 import ServerMessageToast from "../../components/ServerMessageToast";
 import { validateInputText } from "../../utils/StringUtils";
+import { pushToast } from "../../utils/ToastBus";
 
 export async function loader({ request }) {
   const authentication = requireAuth();
@@ -34,7 +35,7 @@ export async function loader({ request }) {
     searchValue,
     page,
     sortType,
-    sortOrder
+    sortOrder,
   );
 
   const userGroupsData = { authentication, userGroupsDataAPI };
@@ -85,7 +86,7 @@ export async function action({ request }) {
       let addUserGroupResponse = await addUserGroup(
         userGroupDescription,
         accessDuration,
-        modulePrivileges
+        modulePrivileges,
       );
       if (addUserGroupResponse) {
         return { ...addUserGroupResponse, formType: "addUserGroups" };
@@ -125,7 +126,7 @@ export async function action({ request }) {
         userGroupId,
         userGroupDescription,
         accessDuration,
-        batchNo
+        batchNo,
       );
       if (editUserGroupResponse) {
         return { ...editUserGroupResponse, formType: "editUserGroups" };
@@ -182,18 +183,18 @@ export default function UserGroups() {
   const errors = {
     add: {
       adduserGroupDescriptionError: response?.errors?.filter(
-        (o) => o.name === "adduserGroupDescription"
+        (o) => o.name === "adduserGroupDescription",
       ),
       addAccessDurationError: response?.errors?.filter(
-        (o) => o.name === "addAccessDuration"
+        (o) => o.name === "addAccessDuration",
       ),
     },
     edit: {
       edituserGroupDescriptionError: response?.errors?.filter(
-        (o) => o.name === "edituserGroupDescription"
+        (o) => o.name === "edituserGroupDescription",
       ),
       editAccessDurationError: response?.errors?.filter(
-        (o) => o.name === "editAccessDuration"
+        (o) => o.name === "editAccessDuration",
       ),
     },
   };
@@ -211,7 +212,6 @@ export default function UserGroups() {
   }, [searchParams]);
 
   const navigation = useNavigation();
-  const [toasts, setToasts] = useState([]);
 
   useEffect(() => {
     if (
@@ -221,7 +221,7 @@ export default function UserGroups() {
     ) {
       if (response.formType === "addUserGroups" && response.message.success) {
         document.getElementById("addUserGroupForm").reset();
-         document.getElementById("addModalClose").click();
+        document.getElementById("addModalClose").click();
         clearModalData();
         setResetMP((prev) => !prev);
       }
@@ -241,17 +241,9 @@ export default function UserGroups() {
         }, 500);
       }
     }
-    setToasts((prevToasts) => {
-      const newTosts = prevToasts.map((x) => x);
-      newTosts.unshift(
-        <ServerMessageToast
-          key={prevToasts.length + 1}
-          message={response?.message}
-          id={prevToasts.length + 1}
-        />
-      );
-      return newTosts;
-    });
+    if (response?.message) {
+      pushToast(response.message);
+    }
   }, [response]);
 
   function clearModalData() {
@@ -314,7 +306,7 @@ export default function UserGroups() {
                     function loadModalData(userGroupId) {
                       setModal(() => {
                         const userGroup = objects.filter(
-                          (userGroup) => userGroup.userGroupId === userGroupId
+                          (userGroup) => userGroup.userGroupId === userGroupId,
                         );
                         return {
                           ...userGroup[0],
@@ -415,7 +407,7 @@ export default function UserGroups() {
                     const modulePrivilegesChecklist = modules.map((module) => {
                       const modulePrivilege = modulePrivileges.filter(
                         (modulePrivilege) =>
-                          modulePrivilege.moduleId === module.id
+                          modulePrivilege.moduleId === module.id,
                       )[0];
                       return (
                         <tr key={module.id}>
@@ -455,7 +447,7 @@ export default function UserGroups() {
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                          </tr>
+                          </tr>,
                         );
                       }
                       return dataGrid;
@@ -542,7 +534,7 @@ export default function UserGroups() {
                                             return {
                                               ...prevSearchForm,
                                               searchValue: validateInputText(
-                                                event.target.value
+                                                event.target.value,
                                               ),
                                             };
                                           });
@@ -618,7 +610,7 @@ export default function UserGroups() {
                                                         sortType: "UserGroupId",
                                                         sortOrder: sortOrder,
                                                       };
-                                                    }
+                                                    },
                                                   );
                                                 }}
                                                 className="sort-btn"
@@ -664,7 +656,7 @@ export default function UserGroups() {
                                                           "userGroupDescription",
                                                         sortOrder: sortOrder,
                                                       };
-                                                    }
+                                                    },
                                                   );
                                                 }}
                                                 className="sort-btn"
@@ -710,7 +702,7 @@ export default function UserGroups() {
                                                           "numberOfUsers",
                                                         sortOrder: sortOrder,
                                                       };
-                                                    }
+                                                    },
                                                   );
                                                 }}
                                                 className="sort-btn"
@@ -1068,7 +1060,7 @@ export default function UserGroups() {
                                 <button
                                   type="button"
                                   className="btn-close"
-                                   id="addModalClose"
+                                  id="addModalClose"
                                   data-bs-dismiss="modal"
                                   aria-label="Close"
                                   disabled={navigation.state === "submitting"}
@@ -1098,7 +1090,7 @@ export default function UserGroups() {
                                             ...prevModal,
                                             userGroupDescription:
                                               validateInputText(
-                                                event.target.value
+                                                event.target.value,
                                               ),
                                           };
                                         });
@@ -1261,7 +1253,7 @@ export default function UserGroups() {
                                           ...prevModal,
                                           userGroupDescription:
                                             validateInputText(
-                                              event.target.value
+                                              event.target.value,
                                             ),
                                           hidden: {
                                             ...prevModal.hidden,
@@ -1372,9 +1364,7 @@ export default function UserGroups() {
                             </div>
                           </div>
                         </div>
-                        <div className="toast-container toast-positioner">
-                          {toasts}
-                        </div>
+                        {/* Global toasts are rendered by SecondaryLayout via ToastBus */}
                       </>
                     );
                   }}
