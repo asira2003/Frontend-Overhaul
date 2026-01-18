@@ -226,6 +226,47 @@ export default function UserGroups() {
 
   const navigation = useNavigation();
 
+  const PALETTE_STORAGE_KEY = "userGroupColors";
+
+  function loadPaletteStore() {
+    try {
+      const raw = localStorage.getItem(PALETTE_STORAGE_KEY);
+      if (!raw) return {};
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function savePaletteStore(store) {
+    try {
+      localStorage.setItem(PALETTE_STORAGE_KEY, JSON.stringify(store));
+    } catch (_) {
+      // ignore write errors
+    }
+  }
+
+  // Create a palette similar to predefined pills
+  function paletteFromHue(h) {
+    const bg = `hsl(${h}, 90%, 94%)`;
+    const text = `hsl(${h}, 70%, 35%)`;
+    const border = `hsl(${h}, 85%, 86%)`;
+    return { bg, text, border };
+  }
+
+  // Use golden-angle distribution for distinct hues
+  function getOrCreatePalette(key, store) {
+    if (!key) key = "group";
+    if (store[key]) return store[key];
+    const count = Object.keys(store).length;
+    const hue = (count * 137) % 360; // 137 ~= golden angle for good spacing
+    const palette = paletteFromHue(hue);
+    store[key] = palette;
+    savePaletteStore(store);
+    return palette;
+  }
+
   useEffect(() => {
     if (
       response !== undefined &&
@@ -234,9 +275,10 @@ export default function UserGroups() {
     ) {
       if (response.formType === "addUserGroups" && response.message.success) {
         document.getElementById("addUserGroupForm").reset();
-        document.getElementById("addModalClose").click();
-        clearModalData();
-        setResetMP((prev) => !prev);
+        setIsAddOpen(false);
+        setTimeout(function () {
+          clearModalData();
+        }, 500);
       }
       if (
         response.formType === "deleteUserGroups" &&
@@ -304,6 +346,7 @@ export default function UserGroups() {
                 <Await resolve={userGroupsDataAPI}>
                   {({ data }) => {
                     const { authorities, pagination, objects, modules } = data;
+                    const paletteStore = loadPaletteStore();
                     useEffect(() => {
                       const newModulePrivileges = [];
                       modules.map((module) => {
@@ -349,13 +392,35 @@ export default function UserGroups() {
                           : ug.includes("MODERATOR")
                             ? "group-moderator"
                             : "group-user";
+                      const pillStyle =
+                        pillClass === "group-user"
+                          ? (function () {
+                              const key = String(
+                                userGroup.userGroupId ||
+                                  userGroup.userGroupDescription ||
+                                  "group",
+                              );
+                              const { bg, text, border } = getOrCreatePalette(
+                                key,
+                                paletteStore,
+                              );
+                              return {
+                                background: bg,
+                                color: text,
+                                borderColor: border,
+                              };
+                            })()
+                          : undefined;
                       return (
                         <tr key={userGroup.userGroupId}>
                           <td>
                             <strong>{userGroup.userGroupId}</strong>
                           </td>
                           <td>
-                            <span className={`group-pill ${pillClass}`}>
+                            <span
+                              className={`group-pill ${pillClass}`}
+                              style={pillStyle}
+                            >
                               {userGroup.userGroupDescription}
                             </span>
                           </td>
