@@ -129,9 +129,24 @@ export default function EditUserDialog({
             </div>
 
             {/* Hidden fields */}
-            <input type="hidden" name="formType" value="editUser" readOnly={true} />
-            <input type="hidden" name="userId" value={modal.userId || ""} readOnly={true} />
-            <input type="hidden" name="batchNo" value={modal.batchNo || ""} readOnly={true} />
+            <input
+              type="hidden"
+              name="formType"
+              value="editUser"
+              readOnly={true}
+            />
+            <input
+              type="hidden"
+              name="userId"
+              value={modal.userId || ""}
+              readOnly={true}
+            />
+            <input
+              type="hidden"
+              name="batchNo"
+              value={modal.batchNo || ""}
+              readOnly={true}
+            />
 
             <div className="app-actions">
               <button
