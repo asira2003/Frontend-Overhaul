@@ -1,0 +1,312 @@
+/* Global page styles for modern tables and headers (Users page) */
+.secondary-page {
+  padding: 24px 16px;
+  min-height: calc(100vh - 80px);
+  background: #f1f5f9;
+}
+/* Card container */
+.page-card {
+  margin: 24px auto;
+  max-width: 1200px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  border-radius: 16px;
+  box-shadow: 0 24px 40px rgba(2, 6, 23, 0.06);
+}
+
+/* Header section */
+.users-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.users-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.users-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.users-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 18px 28px rgba(37, 99, 235, 0.35);
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+.users-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 34px rgba(37, 99, 235, 0.4);
+  background: #1d4ed8;
+}
+
+/* Controls row */
+.users-controls {
+  padding: 16px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.users-search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.users-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+.users-select {
+  min-width: 160px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  padding: 8px 12px;
+  outline: none;
+}
+.users-select:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.users-searchbox {
+  position: relative;
+  flex: 1 1 360px;
+}
+.users-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  padding: 10px 14px 10px 38px;
+  outline: none;
+}
+.users-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+.users-input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 18px;
+}
+
+/* Table */
+.users-table-wrap {
+  padding: 0 24px 24px;
+}
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.users-table thead tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+.users-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #475569;
+  font-weight: 700;
+}
+.users-table td {
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #334155;
+}
+.users-table tbody tr {
+  transition: background 160ms ease;
+}
+.users-table tbody tr:hover {
+  background: rgba(241, 245, 249, 0.5);
+}
+
+/* Action icons */
+.users-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #64748b;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.action-icon.view:hover {
+  color: #2563eb;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+  box-shadow: 0 10px 16px rgba(37, 99, 235, 0.18);
+}
+.action-icon.edit:hover {
+  color: #d97706;
+  border-color: #fde68a;
+  background: #fffbeb;
+  box-shadow: 0 10px 16px rgba(217, 119, 6, 0.18);
+}
+.action-icon.delete:hover {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fee2e2;
+  box-shadow: 0 10px 16px rgba(220, 38, 38, 0.18);
+}
+
+/* Group pill */
+.group-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 600;
+}
+.group-admin {
+  background: #f3e8ff;
+  color: #7c3aed;
+  border-color: #e9d5ff;
+}
+.group-manager {
+  background: #eff6ff;
+  color: #2563eb;
+  border-color: #dbeafe;
+}
+.group-moderator {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+.group-user {
+  background: #f8fafc;
+  color: #334155;
+  border-color: #e2e8f0;
+}
+
+/* Pagination */
+.users-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  border-top: 1px solid rgba(226, 232, 240, 0.6);
+  background: #f8fafc;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.users-page-info {
+  font-size: 13px;
+  color: #475569;
+}
+
+.page-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.page-btn:hover {
+  background: #fff;
+  border-color: #94a3b8;
+}
+
+.page-number {
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #334155;
+  cursor: pointer;
+  transition:
+    box-shadow 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+.page-number.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+  box-shadow: 0 14px 22px rgba(37, 99, 235, 0.25);
+}
+.page-number:not(.active):hover {
+  background: #fff;
+  border-color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-card {
+    margin: 16px;
+    border-radius: 14px;
+  }
+  .users-header {
+    padding: 16px;
+  }
+  .users-controls {
+    padding: 12px 16px;
+  }
+  .users-table-wrap {
+    padding: 0 16px 16px;
+    overflow-x: auto;
+  }
+  .users-table {
+    min-width: 700px;
+  }
+  .users-pagination {
+    padding: 12px 16px;
+  }
+}

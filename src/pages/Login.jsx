@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
 import logo from "../assets/images/logo/logo.png";
 import { login, requireAuth } from "../api/administration/authenticationApi";
+import { pushToast } from "../utils/ToastBus";
 import { validateInputTextNoUpperCase } from "../utils/StringUtils";
-import ServerMessageToast from "../components/ServerMessageToast";
 import { Lock, Mail, Eye, EyeOff, BarChart3, Shield, Zap } from "lucide-react";
 
 export async function loader() {
@@ -52,6 +52,8 @@ export async function action({ request }) {
         );
         sessionStorage.setItem("modules", JSON.stringify(data.data.modules));
         sessionStorage.setItem("features", JSON.stringify(data.data.features));
+        // Queue a global login toast to display after redirect
+        pushToast({ success: true, text: "Logged in successfully" });
         return redirect("../");
       } else {
         return data;
@@ -70,8 +72,6 @@ export default function Login() {
   const passwordError = validationErrors.filter((o) => o.name === "password");
 
   const [showPassword, setShowPassword] = useState(false);
-  const [toasts, setToasts] = useState([]);
-  const [toastCounter, setToastCounter] = useState(0);
 
   const [modal, setModal] = useState({
     username: "",
@@ -83,28 +83,11 @@ export default function Login() {
     if (response?.errors) {
       setValidationErrors(response.errors);
     }
-
+    // If server returned a message (e.g., invalid credentials), push a global toast
     if (response?.message) {
-      setToasts((prevToasts) => {
-        const newToast = {
-          id: toastCounter,
-          message: response.message,
-        };
-
-        // Add new toast to the beginning and keep only the last 3
-        const updatedToasts = [newToast, ...prevToasts].slice(0, 3);
-
-        return updatedToasts;
-      });
-
-      setToastCounter((prev) => prev + 1);
+      pushToast(response.message);
     }
   }, [response]);
-
-  // Function to remove toasts
-  const removeToast = (id) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-  };
 
   // Helper to clear specific error
   const clearError = (fieldName) => {
@@ -270,19 +253,7 @@ export default function Login() {
           </div>
         </div>
       </div>
-
-      {/* Toast notifications */}
-      <div className="toast-wrapper">
-        {toasts.map((toast, index) => (
-          <ServerMessageToast
-            key={toast.id}
-            message={toast.message}
-            id={toast.id}
-            index={index}
-            onRemove={removeToast}
-          />
-        ))}
-      </div>
+      {/* Global toasts are rendered by PrimaryLayout; login shows inline validation errors only */}
     </>
   );
 }

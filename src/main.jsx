@@ -9,6 +9,7 @@ import "./index_new.css";
 import "./index-breakpoints.css";
 import "./login-page.css";
 import "./login-page-breakpoints.css";
+import "./pages.css";
 // import "./index.css";
 // import "./styles.css";
 
