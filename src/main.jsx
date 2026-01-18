@@ -7,6 +7,7 @@ import "./assets/Remix-Icons/remixicon.css";
 
 import "./index_new.css";
 import "./login-page.css";
+import "./login-page-breakpoints.css";
 // import "./index.css";
 // import "./styles.css";
 

@@ -4,7 +4,7 @@ import logo from "../assets/images/logo/logo.png";
 import { login, requireAuth } from "../api/administration/authenticationApi";
 import { validateInputTextNoUpperCase } from "../utils/StringUtils";
 import ServerMessageToast from "../components/ServerMessageToast";
-import { Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff, BarChart3, Shield, Zap } from "lucide-react";
 
 export async function loader() {
   const { message } = await requireAuth();
@@ -114,7 +114,22 @@ export default function Login() {
   return (
     <>
       <div className="login-container">
-        <div className="login-left"></div>
+        <div className="login-left">
+          <div className="login-hero">
+            <div className="login-brand">
+              <img src={logo} alt="Logo" className="login-brand-logo" />
+              <span className="login-brand-name">Sirima Lanka Pvt. Ltd.</span>
+            </div>
+
+            <div className="login-hero-text">
+              <h1 className="accent">Admin Console</h1>
+              <p>
+                Manage your entire platform with powerful tools and real-time
+                analytics.
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="login-right">
           <div className="login-form-container">
             <div className="login-form-header">

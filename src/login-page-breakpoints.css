@@ -1,0 +1,143 @@
+/* Responsive desktop/tablet styles for the login page */
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .login-container {
+    flex-direction: row;
+    min-height: 100vh;
+  }
+
+  .login-left {
+    display: flex;
+    flex: 1 1 55%;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+
+    /* Gradient similar to the mock */
+    background: linear-gradient(
+      135deg,
+      #5b2cff 0%,
+      #7c3aed 25%,
+      #2563eb 60%,
+      #0ea5e9 100%
+    );
+  }
+
+  .login-right {
+    flex: 1 1 45%;
+    padding: 2rem;
+  }
+
+  /* Hero content wrapper */
+  .login-hero {
+    width: min(860px, 90%);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  /* Brand (logo + name) */
+  .login-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .login-brand-logo {
+    width: clamp(40px, 4.5vw, 56px);
+    height: clamp(40px, 4.5vw, 56px);
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+  }
+  .login-brand-name {
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+
+  /* Headline area */
+  .login-hero-text h1 {
+    margin: 0;
+    line-height: 1.1;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 700;
+  }
+  .login-hero-text h1.accent {
+    color: #ffffff;
+    font-size: clamp(2.6rem, 5vw, 3.6rem);
+  }
+  .login-hero-text p {
+    margin-top: 1rem;
+    max-width: 46ch;
+    font-size: clamp(0.95rem, 1.25vw, 1.05rem);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Feature cards */
+  .login-hero-features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .feature-card {
+    backdrop-filter: saturate(1.2) blur(4px);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.18) 0%,
+      rgba(255, 255, 255, 0.08) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 14px;
+    padding: 1rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  .feature-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .feature-card span {
+    font-weight: 500;
+  }
+
+  /* Right form tweaks on larger viewports */
+  .login-form-container {
+    max-width: 520px;
+    border-radius: 18px;
+  }
+  .login-form-header h2 {
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+  }
+
+  /* Improve inputs for desktop */
+  .login-form-input-box-input {
+    height: 2.9rem;
+    font-size: 1rem;
+  }
+
+  .login-form-submit-button {
+    height: 3rem;
+    font-size: 1.05rem;
+  }
+}
+
+/* Large desktop refinements */
+@media (min-width: 1200px) {
+  .login-right {
+    padding: 3rem;
+  }
+
+  .login-hero {
+    gap: 2.25rem;
+  }
+
+  .feature-card {
+    padding: 1.25rem 1rem;
+  }
+}
