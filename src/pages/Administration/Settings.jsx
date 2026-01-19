@@ -60,7 +60,7 @@ export async function action({ request }) {
         let resetPasswordResponse = await resetPassword(
           newPassword,
           oldPassword,
-          batchNo
+          batchNo,
         );
         if (resetPasswordResponse !== null) {
           resetPasswordResponse = {
@@ -83,6 +83,7 @@ export default function Settings() {
     newPassword: "",
     newPasswordRepeat: "",
   });
+  const [resetPasswordModalOpen, setResetPasswordModalOpen] = useState(false);
   const response = useActionData();
   const navigation = useNavigation();
   const [errors, setErrors] = useState({
@@ -113,6 +114,11 @@ export default function Settings() {
   }
   const [toasts, setToasts] = useState([]);
 
+  useEffect(() => {
+    if (resetPasswordModalOpen) document.body.classList.add("no-scroll");
+    return () => document.body.classList.remove("no-scroll");
+  }, [resetPasswordModalOpen]);
+
   return (
     <>
       <Suspense fallback={<ContentThrobber />}>
@@ -130,13 +136,13 @@ export default function Settings() {
                         return {
                           resetPassword: {
                             oldPasswordError: response?.errors?.filter(
-                              (o) => o.name === "oldPassword"
+                              (o) => o.name === "oldPassword",
                             ),
                             newPasswordError: response?.errors?.filter(
-                              (o) => o.name === "newPassword"
+                              (o) => o.name === "newPassword",
                             ),
                             newPasswordRepeatError: response?.errors?.filter(
-                              (o) => o.name === "newPasswordRepeat"
+                              (o) => o.name === "newPasswordRepeat",
                             ),
                           },
                         };
@@ -150,7 +156,7 @@ export default function Settings() {
                           response.formType === "resetPassword" &&
                           response.message.success
                         ) {
-                          document.getElementById("resetModalClose").click();
+                          setResetPasswordModalOpen(false);
                           setTimeout(function () {
                             clearResetPasswordModal();
                           }, 500);
@@ -163,56 +169,116 @@ export default function Settings() {
                             key={prevToasts.length + 1}
                             message={response?.message}
                             id={prevToasts.length + 1}
-                          />
+                          />,
                         );
                         return newTosts;
                       });
                     }, [response]);
                     return (
                       <>
-                        {/* Main sction */}
-                        <section>
+                        {/* Main Section */}
+                        <section className="secondary-page">
                           <div className="content">
-                            <div className="container  settings-page">
-                              <div className="col title-grn">
-                                <h4 className="page-header user-heading">
-                                  Settings
-                                </h4>
-                              </div>
-                              <div className="settings-container">
-                                <div className="detail-table">
-                                  <div className="email detail">
-                                    <div className="label">User</div>
-                                    <div className="value">
-                                      {data.user.fullName}&nbsp;(
-                                      {data.user.userId})
-                                    </div>
+                            <div className="container">
+                              <div className="page-card">
+                                <div className="list-header">
+                                  <div>
+                                    <h2 className="list-title">
+                                      Account Settings
+                                    </h2>
+                                    <p className="list-subtitle">
+                                      Manage your account information and
+                                      security
+                                    </p>
                                   </div>
-                                  <div className="fullName detail">
-                                    <div className="label">User Group</div>
-                                    <div className="value">
-                                      {data.user.userGroup.userGroupDescription}
-                                      &nbsp;(
-                                      {data.user.userGroup.userGroupId})
+                                </div>
+
+                                <div className="settings-content">
+                                  {/* User Information Card */}
+                                  <div className="settings-card">
+                                    <div className="settings-card-header">
+                                      <i className="fa-solid fa-user-circle"></i>
+                                      <h3>Profile Information</h3>
                                     </div>
-                                  </div>
-                                  <div className="fullName detail">
-                                    <div className="label">User Email</div>
-                                    <div className="value">
-                                      {data.user.userEmail}
+                                    <div className="settings-card-body">
+                                      <div className="settings-info-grid">
+                                        <div className="settings-info-item">
+                                          <label className="settings-label">
+                                            <i className="fa-solid fa-user"></i>
+                                            Full Name
+                                          </label>
+                                          <div className="settings-value">
+                                            {data.user.fullName}
+                                          </div>
+                                        </div>
+                                        <div className="settings-info-item">
+                                          <label className="settings-label">
+                                            <i className="fa-solid fa-id-badge"></i>
+                                            User ID
+                                          </label>
+                                          <div className="settings-value">
+                                            {data.user.userId}
+                                          </div>
+                                        </div>
+                                        <div className="settings-info-item">
+                                          <label className="settings-label">
+                                            <i className="fa-solid fa-envelope"></i>
+                                            Email Address
+                                          </label>
+                                          <div className="settings-value">
+                                            {data.user.userEmail}
+                                          </div>
+                                        </div>
+                                        <div className="settings-info-item">
+                                          <label className="settings-label">
+                                            <i className="fa-solid fa-users"></i>
+                                            User Group
+                                          </label>
+                                          <div className="settings-value">
+                                            {
+                                              data.user.userGroup
+                                                .userGroupDescription
+                                            }
+                                            <span className="settings-value-secondary">
+                                              (ID:{" "}
+                                              {data.user.userGroup.userGroupId})
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
                                     </div>
                                   </div>
 
-                                  <div className="buttons">
-                                    <button
-                                      type="button"
-                                      className="setting-btn"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#resetPasswordModal"
-                                    >
-                                      <i className="fa-solid fa-key"></i>
-                                      &nbsp;Reset&nbsp;Password
-                                    </button>
+                                  {/* Security Settings Card */}
+                                  <div className="settings-card">
+                                    <div className="settings-card-header">
+                                      <i className="fa-solid fa-shield-halved"></i>
+                                      <h3>Security Settings</h3>
+                                    </div>
+                                    <div className="settings-card-body">
+                                      <div className="settings-action-item">
+                                        <div className="settings-action-info">
+                                          <div className="settings-action-title">
+                                            <i className="fa-solid fa-key"></i>
+                                            Password
+                                          </div>
+                                          <div className="settings-action-description">
+                                            Update your password to keep your
+                                            account secure
+                                          </div>
+                                        </div>
+                                        <button
+                                          type="button"
+                                          className="list-add-btn"
+                                          onClick={() =>
+                                            setResetPasswordModalOpen(true)
+                                          }
+                                        >
+                                          <i className="fa-solid fa-key"></i>
+                                          Change Password
+                                        </button>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -220,50 +286,57 @@ export default function Settings() {
                           </div>
                         </section>
                         {/* Reset Password Modal */}
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="resetPasswordModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
+                        {resetPasswordModalOpen && (
+                          <div
+                            className="app-dialog-overlay"
+                            role="dialog"
+                            aria-modal="true"
+                          >
+                            <div className="app-dialog">
+                              <div className="app-dialog__header">
                                 <div>
-                                  <h4 className="page-header">
-                                    Account Settings | Password Reset
-                                  </h4>
-                                  <div className="mt-4 callback-text">
-                                    <span className="fw-bold">User: </span>
+                                  <h2 className="app-dialog__title">
+                                    Change Password
+                                  </h2>
+                                  <p className="app-dialog__subtitle">
                                     {data.user.fullName} ({data.user.userId})
-                                  </div>
+                                  </p>
                                 </div>
                                 <button
                                   type="button"
-                                  id="resetModalClose"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
-                                  aria-label="Close"
-                                  onClick={clearResetPasswordModal}
+                                  className="app-dialog__close"
+                                  onClick={() => {
+                                    setResetPasswordModalOpen(false);
+                                    clearResetPasswordModal();
+                                  }}
                                   disabled={navigation.state === "submitting"}
-                                ></button>
+                                  aria-label="Close"
+                                >
+                                  <i className="fa-solid fa-xmark"></i>
+                                </button>
                               </div>
-                              <div className="modal-body">
-                                <Form id="resetPasswordForm" method="POST">
-                                  <div className="mb-3">
+
+                              <div className="app-dialog__body">
+                                <Form
+                                  id="resetPasswordForm"
+                                  method="POST"
+                                  className="app-form"
+                                >
+                                  {/* Current Password */}
+                                  <div className="app-field">
                                     <label
                                       htmlFor="oldPassword"
-                                      className="form-label fw-bold"
+                                      className="app-label"
                                     >
-                                      Current Password
+                                      <i className="fa-solid fa-lock"></i>
+                                      <span>Current Password</span>
                                     </label>
                                     <input
                                       type="password"
-                                      className="form-control form-input-mod"
+                                      className="app-input"
                                       id="oldPassword"
                                       name="oldPassword"
+                                      placeholder="Enter your current password"
                                       disabled={
                                         navigation.state === "submitting"
                                       }
@@ -275,17 +348,17 @@ export default function Settings() {
                                               ...prevResetPasswordModal,
                                               oldPassword:
                                                 validateInputTextNoUpperCase(
-                                                  event.target.value
+                                                  event.target.value,
                                                 ),
                                             };
-                                          }
+                                          },
                                         );
                                       }}
                                     />
                                     {errors.resetPassword.oldPasswordError &&
                                       errors.resetPassword.oldPasswordError
                                         .length > 0 && (
-                                        <div className="text-danger">
+                                        <div className="app-error">
                                           {
                                             errors.resetPassword
                                               .oldPasswordError[0].message
@@ -293,18 +366,22 @@ export default function Settings() {
                                         </div>
                                       )}
                                   </div>
-                                  <div className="mb-3">
+
+                                  {/* New Password */}
+                                  <div className="app-field">
                                     <label
                                       htmlFor="newPassword"
-                                      className="form-label fw-bold"
+                                      className="app-label"
                                     >
-                                      New Password
+                                      <i className="fa-solid fa-lock"></i>
+                                      <span>New Password</span>
                                     </label>
                                     <input
                                       type="password"
-                                      className="form-control form-input-mod"
+                                      className="app-input"
                                       id="newPassword"
                                       name="newPassword"
+                                      placeholder="Enter your new password"
                                       disabled={
                                         navigation.state === "submitting"
                                       }
@@ -316,17 +393,17 @@ export default function Settings() {
                                               ...prevResetPasswordModal,
                                               newPassword:
                                                 validateInputTextNoUpperCase(
-                                                  event.target.value
+                                                  event.target.value,
                                                 ),
                                             };
-                                          }
+                                          },
                                         );
                                       }}
                                     />
                                     {errors.resetPassword.newPasswordError &&
                                       errors.resetPassword.newPasswordError
                                         .length > 0 && (
-                                        <div className="text-danger">
+                                        <div className="app-error">
                                           {
                                             errors.resetPassword
                                               .newPasswordError[0].message
@@ -334,18 +411,22 @@ export default function Settings() {
                                         </div>
                                       )}
                                   </div>
-                                  <div className="mb-3">
+
+                                  {/* Confirm New Password */}
+                                  <div className="app-field">
                                     <label
                                       htmlFor="newPasswordRepeat"
-                                      className="form-label fw-bold"
+                                      className="app-label"
                                     >
-                                      Re-enter New Password
+                                      <i className="fa-solid fa-lock"></i>
+                                      <span>Confirm New Password</span>
                                     </label>
                                     <input
                                       type="password"
-                                      className="form-control form-input-mod"
+                                      className="app-input"
                                       id="newPasswordRepeat"
                                       name="newPasswordRepeat"
+                                      placeholder="Re-enter your new password"
                                       disabled={
                                         navigation.state === "submitting"
                                       }
@@ -359,10 +440,10 @@ export default function Settings() {
                                               ...prevResetPasswordModal,
                                               newPasswordRepeat:
                                                 validateInputTextNoUpperCase(
-                                                  event.target.value
+                                                  event.target.value,
                                                 ),
                                             };
-                                          }
+                                          },
                                         );
                                       }}
                                     />
@@ -370,7 +451,7 @@ export default function Settings() {
                                       .newPasswordRepeatError &&
                                       errors.resetPassword
                                         .newPasswordRepeatError.length > 0 && (
-                                        <div className="text-danger">
+                                        <div className="app-error">
                                           {
                                             errors.resetPassword
                                               .newPasswordRepeatError[0].message
@@ -378,6 +459,7 @@ export default function Settings() {
                                         </div>
                                       )}
                                   </div>
+
                                   <input
                                     type="hidden"
                                     name="formType"
@@ -390,29 +472,42 @@ export default function Settings() {
                                     value={data.user.batchNo}
                                     readOnly={true}
                                   />
+
+                                  <div className="app-actions">
+                                    <button
+                                      type="button"
+                                      className="app-dialog__close-btn"
+                                      onClick={() => {
+                                        setResetPasswordModalOpen(false);
+                                        clearResetPasswordModal();
+                                      }}
+                                      disabled={
+                                        navigation.state === "submitting"
+                                      }
+                                    >
+                                      Cancel
+                                    </button>
+                                    <button
+                                      type="submit"
+                                      className="app-btn app-btn--primary"
+                                      disabled={
+                                        navigation.state === "submitting"
+                                      }
+                                    >
+                                      <i
+                                        className="fa-solid fa-key"
+                                        style={{ marginRight: 6 }}
+                                      ></i>
+                                      {navigation.state === "submitting"
+                                        ? "Updating..."
+                                        : "Change Password"}
+                                    </button>
+                                  </div>
                                 </Form>
-                              </div>
-                              <div className="modal-footer">
-                                <div className="col text-end add-btn pe-2">
-                                  <button
-                                    type="submit"
-                                    className="btn btn-theme btn-sm"
-                                    form="resetPasswordForm"
-                                    disabled={navigation.state === "submitting"}
-                                  >
-                                    &nbsp;
-                                    <i className="fa-sharp fa-solid fa-key"></i>
-                                    &nbsp;&nbsp;{" "}
-                                    {navigation.state === "submitting"
-                                      ? "Submitting..."
-                                      : "Reset Password"}
-                                    &nbsp;&nbsp;&nbsp;
-                                  </button>
-                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                         <div className="toast-container toast-positioner">
                           {toasts}
                         </div>

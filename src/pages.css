@@ -1019,3 +1019,284 @@
     font-size: 24px;
   }
 }
+
+/* ========================================
+   Settings Page Styles
+   ======================================== */
+
+.settings-content {
+  padding: 24px;
+}
+
+.settings-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.settings-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 24px;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.settings-card-header i {
+  font-size: 20px;
+  color: #2563eb;
+}
+
+.settings-card-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.settings-card-body {
+  padding: 24px;
+}
+
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.settings-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.settings-label i {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.settings-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e293b;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-value-secondary {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.settings-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.settings-action-info {
+  flex: 1;
+}
+
+.settings-action-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.settings-action-title i {
+  font-size: 18px;
+  color: #2563eb;
+}
+
+.settings-action-description {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Modal improvements */
+.modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modal-title i {
+  color: #2563eb;
+}
+
+.modal-subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 6px 0 0;
+  font-weight: 400;
+}
+
+.form-group-mod {
+  margin-bottom: 20px;
+}
+
+.form-label-mod {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.form-label-mod i {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.form-error-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #dc2626;
+}
+
+.form-error-text i {
+  font-size: 12px;
+}
+
+.btn-cancel,
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+.btn-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-submit {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.btn-submit:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .settings-content {
+    padding: 16px;
+  }
+
+  .settings-info-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .settings-action-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .settings-action-item .list-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btn-cancel,
+  .btn-submit {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-card-header h3 {
+    font-size: 16px;
+  }
+
+  .settings-value {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  .settings-action-title {
+    font-size: 15px;
+  }
+
+  .settings-action-description {
+    font-size: 13px;
+  }
+}

@@ -228,7 +228,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9998;
+  z-index: 10000;
 }
 .fullscreen-throbber.align-top {
   justify-content: flex-start;
