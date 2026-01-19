@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../api/administration/authenticationApi";
 
-export default function SecondaryHeader() {
+export default function SecondaryHeader({ onMenuToggle }) {
   const fullName = sessionStorage.getItem("fullName");
   const userEmail = sessionStorage.getItem("userEmail");
   const userGroupDescription = sessionStorage.getItem("userGroupDescription");
@@ -45,6 +45,14 @@ export default function SecondaryHeader() {
 
   return (
     <header className="secondary-header">
+      <button
+        className="mobile-menu-trigger"
+        onClick={onMenuToggle}
+        aria-label="Toggle menu"
+      >
+        <i className="fa-solid fa-bars"></i>
+      </button>
+
       <div className="secondary-brand">
         <img src="/logo.png" alt="Logo" className="brand-logo" />
         <span className="brand-name">Sirima Lanka</span>

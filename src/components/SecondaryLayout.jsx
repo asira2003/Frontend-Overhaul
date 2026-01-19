@@ -33,6 +33,7 @@ export default function SecondaryLayout() {
   const navigation = useNavigation();
   const [toasts, setToasts] = useState([]);
   const [toastCounter, setToastCounter] = useState(0);
+  const [sidebarMobileOpen, setSidebarMobileOpen] = useState(false);
   useGlobalToastConsumer(navigation, setToasts, setToastCounter);
   const activeModule =
     loaderData.pathname === "/users" ||
@@ -58,11 +59,16 @@ export default function SecondaryLayout() {
   return (
     <>
       {renderThrobber(navigation)}
-      <Header entryUser={loaderData.entryUser} />
-      {/* <SideNavbar
+      <Header
+        entryUser={loaderData.entryUser}
+        onMenuToggle={() => setSidebarMobileOpen((prev) => !prev)}
+      />
+      <SideNavbar
         activeModuleParam={activeModule}
         activeFeatureParam={activeFeature}
-      /> */}
+        mobileOpen={sidebarMobileOpen}
+        onMobileClose={() => setSidebarMobileOpen(false)}
+      />
       {/* Global toast wrapper for dashboard pages */}
       <div className="toast-wrapper">
         {toasts.map((toast, index) => (
