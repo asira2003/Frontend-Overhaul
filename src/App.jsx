@@ -13,7 +13,6 @@ import Login, {
   action as LoginAction,
   loader as LoginLoader,
 } from "./pages/Login";
-import Overview, { loader as OverviewLoader } from "./pages/Overview";
 import Users, {
   loader as UsersLoader,
   action as UsersAction,
@@ -35,10 +34,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" errorElement={<Error />}>
       <Route element={<SecondaryLayout />} loader={DashboardLayoutLoader}>
-        <Route index element={<Overview />} loader={OverviewLoader} />
-
         <Route
-          path="users"
+          path="/"
           element={<Users />}
           loader={UsersLoader}
           action={UsersAction}

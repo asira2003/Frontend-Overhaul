@@ -27,6 +27,7 @@ import ViewUserDialog from "../../components/users/ViewUserDialog";
 import AddUserDialog from "../../components/users/AddUserDialog";
 import DeleteUserDialog from "../../components/users/DeleteUserDialog";
 import EditUserDialog from "../../components/users/EditUserDialog";
+import { getPaletteStyleForGroup, loadStore } from "../../utils/GroupColors";
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -328,10 +329,15 @@ export default function Users() {
                   {({ data }) => {
                     const { authorities, pagination, objects, userGroups } =
                       data;
+                    const paletteStore = loadStore();
                     const dataGrid = objects.map((user) => {
-                      const ug = (
-                        user.userGroup.userGroupDescription || "USER"
-                      ).toUpperCase();
+                      const resolvedDescription =
+                        user.userGroup.userGroupDescription ||
+                        (userGroups || []).find(
+                          (g) => g.id === user.userGroup.userGroupId,
+                        )?.description ||
+                        "USER";
+                      const ug = (resolvedDescription || "USER").toUpperCase();
                       const pillClass = ug.includes("ADMIN")
                         ? "group-admin"
                         : ug.includes("MANAGER")
@@ -339,6 +345,17 @@ export default function Users() {
                           : ug.includes("MODERATOR")
                             ? "group-moderator"
                             : "group-user";
+                      const pillStyle =
+                        pillClass === "group-user"
+                          ? getPaletteStyleForGroup(
+                              String(
+                                user.userGroup.userGroupId ||
+                                  user.userGroup.userGroupDescription ||
+                                  "group",
+                              ),
+                              paletteStore,
+                            )
+                          : undefined;
                       return (
                         <tr key={user.userId}>
                           <td>
@@ -347,8 +364,11 @@ export default function Users() {
                           <td>{user.fullName}</td>
                           <td>{user.userEmail}</td>
                           <td>
-                            <span className={`group-pill ${pillClass}`}>
-                              {user.userGroup.userGroupDescription}
+                            <span
+                              className={`group-pill ${pillClass}`}
+                              style={pillStyle}
+                            >
+                              {resolvedDescription}
                             </span>
                           </td>
                           <td>
