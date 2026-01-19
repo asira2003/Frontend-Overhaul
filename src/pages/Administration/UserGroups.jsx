@@ -26,6 +26,7 @@ import { pushToast } from "../../utils/ToastBus";
 import ViewUserGroup from "../../components/user-groups/ViewUserGroup";
 import DeleteUserGroup from "../../components/user-groups/DeleteUserGroup";
 import AddUserGroup from "../../components/user-groups/AddUserGroup";
+import EditUserGroup from "../../components/user-groups/EditUserGroup";
 
 export async function loader({ request }) {
   const authentication = requireAuth();
@@ -246,13 +247,13 @@ export default function UserGroups() {
         response.formType === "deleteUserGroups" &&
         response.message.success
       ) {
-        document.getElementById("deleteUserGroupModalClose").click();
+        setIsDeleteOpen(false);
         setTimeout(function () {
           clearModalData();
         }, 500);
       }
       if (response.formType === "editUserGroups" && response.message.success) {
-        document.getElementById("editUseGrouprModalClose").click();
+        setIsEditOpen(false);
         setTimeout(function () {
           clearModalData();
         }, 500);
@@ -419,9 +420,10 @@ export default function UserGroups() {
                                 data-bs-target="#editUserGroupModal"
                                 disabled={!userGroup.authorities.edit}
                                 value={userGroup.userId}
-                                onClick={() =>
-                                  loadModalData(userGroup.userGroupId)
-                                }
+                                onClick={() => {
+                                  loadModalData(userGroup.userGroupId);
+                                  setIsEditOpen(true);
+                                }}
                               >
                                 <i className="fa-solid fa-pen"></i>
                               </button>
@@ -878,6 +880,15 @@ export default function UserGroups() {
                         <AddUserGroup
                           isOpen={isAddOpen}
                           onClose={() => setIsAddOpen(false)}
+                          modal={modal}
+                          setModal={setModal}
+                          modulePrivilegesChecklist={modulePrivilegesChecklist}
+                          modulePrivileges={modulePrivileges}
+                          errors={errors}
+                        />
+                        <EditUserGroup
+                          isOpen={isEditOpen}
+                          onClose={() => setIsEditOpen(false)}
                           modal={modal}
                           setModal={setModal}
                           modulePrivilegesChecklist={modulePrivilegesChecklist}

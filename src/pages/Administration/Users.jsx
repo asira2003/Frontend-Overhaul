@@ -266,13 +266,13 @@ export default function Users() {
         }, 500);
       }
       if (response.formType === "deleteUsers" && response.message.success) {
-        document.getElementById("deleteUserModalClose").click();
+        setIsAddOpen(false);
         setTimeout(function () {
           clearModalData();
         }, 500);
       }
       if (response.formType === "editUsers" && response.message.success) {
-        document.getElementById("editUserModalClose").click();
+        setIsAddOpen(false);
         setTimeout(function () {
           clearModalData();
         }, 500);

@@ -187,7 +187,7 @@ export default function DeleteUserGroup({
             <input
               type="hidden"
               name="formType"
-              value="deleteUser"
+              value="deleteUserGroup"
               readOnly={true}
             />
             <button
