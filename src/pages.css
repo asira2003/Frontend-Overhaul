@@ -55,10 +55,16 @@
     box-shadow 160ms ease,
     background 160ms ease;
 }
-.list-add-btn:hover {
+.list-add-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 22px 34px rgba(37, 99, 235, 0.4);
   background: #1d4ed8;
+}
+.list-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #94a3b8;
+  box-shadow: none;
 }
 
 /* Controls row */
@@ -352,6 +358,10 @@
   overflow: hidden;
 }
 
+.app-dialog--lg {
+  max-width: 800px;
+}
+
 .user-dialog__header,
 .app-dialog__header {
   display: flex;
@@ -497,6 +507,129 @@
   border-top: 1px solid #e2e8f0;
   padding-top: 14px;
   margin-top: 8px;
+}
+
+/* ===================== */
+/* Privileges Page Styles */
+/* ===================== */
+.priv-tabs-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 24px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+.priv-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.priv-tab {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  background: transparent;
+  border: 1px solid transparent;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  cursor: pointer;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.priv-tab:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+.priv-tab.active {
+  background: #ffffff;
+  color: #2563eb;
+  border-color: #e2e8f0;
+  box-shadow: 0 8px 14px rgba(2, 6, 23, 0.06);
+}
+
+.priv-update-btn {
+  margin-bottom: 8px;
+}
+
+.priv-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===================== */
+/* Horizontal Toggle Switch */
+/* ===================== */
+.privilege-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+
+.privilege-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.privilege-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.privilege-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.privilege-switch input:checked + .privilege-slider {
+  background-color: #2563eb;
+}
+
+.privilege-switch input:focus + .privilege-slider {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+.privilege-switch input:checked + .privilege-slider:before {
+  transform: translateX(22px);
+}
+
+.privilege-switch input:disabled + .privilege-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .priv-tabs-wrap {
+    padding: 12px 16px 0;
+  }
+  .priv-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
 }
 .user-timeline__title,
 .app-timeline__title {
@@ -666,18 +799,53 @@
   border-top: 1px solid #e2e8f0;
 }
 .app-btn {
+  display: inline-flex;
+  align-items: center;
   padding: 10px 16px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
 }
 .app-btn--primary {
   background: #2563eb;
   color: #ffffff;
   box-shadow: 0 14px 22px rgba(37, 99, 235, 0.25);
 }
-.app-btn--primary:hover {
+.app-btn--primary:hover:not(:disabled) {
   background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 28px rgba(37, 99, 235, 0.35);
+}
+.app-btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #94a3b8;
+  box-shadow: none;
+}
+
+/* Badge styles */
+.app-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 700;
+}
+.app-badge--success {
+  background: #dcfce7;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+.app-badge--danger {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
 }
 
 /* Table styles for module privileges */

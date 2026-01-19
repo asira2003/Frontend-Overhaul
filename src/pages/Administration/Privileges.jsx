@@ -53,7 +53,7 @@ export async function action({ request }) {
       let updatePrivilegesResponse = await updatePrivileges(
         userGroupId,
         batchNo,
-        filteredPrivileges // Send the filtered privileges array
+        filteredPrivileges, // Send the filtered privileges array
       );
 
       if (updatePrivilegesResponse !== null) {
@@ -89,6 +89,8 @@ export default function Privileges() {
   const [currentModule, setCurrentModule] = useState();
   const [currentFeature, setCurrentFeature] = useState();
   const [currentPrivileges, setCurrentPrivileges] = useState([]);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 
   function stringifyUpdatePrivilegesBatch() {
     return JSON.stringify(updatePrivilegesBatch);
@@ -107,7 +109,7 @@ export default function Privileges() {
         response.formType === "updatePrivileges" &&
         response.message.success
       ) {
-        document.getElementById("updatePrivilegesModalClose").click();
+        setIsUpdateOpen(false);
         setTimeout(function () {
           setUpdatePrivilegesBatch(() => {
             return [];
@@ -127,7 +129,7 @@ export default function Privileges() {
           key={prevToasts.length + 1}
           message={response?.message}
           id={prevToasts.length + 1}
-        />
+        />,
       );
       return newTosts;
     });
@@ -177,16 +179,16 @@ export default function Privileges() {
 
                     function updatePrivilegesBatchLoader(privilegeId) {
                       const currentPrivilege = currentPrivileges.filter(
-                        (privilege) => privilege.privilegeId === privilegeId
+                        (privilege) => privilege.privilegeId === privilegeId,
                       )[0];
                       const originalPrivilege = objects.filter(
-                        (privilege) => privilege.privilegeId === privilegeId
+                        (privilege) => privilege.privilegeId === privilegeId,
                       )[0];
                       if (
                         currentPrivilege.granted !== originalPrivilege.granted
                       ) {
                         const updatePrivilege = updatePrivilegesBatch.filter(
-                          (privilege) => privilege.privilegeId === privilegeId
+                          (privilege) => privilege.privilegeId === privilegeId,
                         )[0];
                         if (updatePrivilege == null) {
                           const newUpdatePrivilegesBatch =
@@ -198,7 +200,7 @@ export default function Privileges() {
                         }
                       } else {
                         const updatePrivilege = updatePrivilegesBatch.filter(
-                          (privilege) => privilege.privilegeId === privilegeId
+                          (privilege) => privilege.privilegeId === privilegeId,
                         )[0];
                         if (updatePrivilege != null) {
                           const index =
@@ -214,18 +216,18 @@ export default function Privileges() {
                     }
 
                     function updatePrivilegesBatchLoaderFromArray(
-                      allPrivileges
+                      allPrivileges,
                     ) {
                       const newUpdatePrivilegesBatch =
                         updatePrivilegesBatch.map((x) => x);
                       allPrivileges.map((privilege) => {
                         const currentPrivilege = currentPrivileges.filter(
                           (cprivilege) =>
-                            cprivilege.privilegeId === privilege.privilegeId
+                            cprivilege.privilegeId === privilege.privilegeId,
                         )[0];
                         const originalPrivilege = objects.filter(
                           (oprivilege) =>
-                            oprivilege.privilegeId === privilege.privilegeId
+                            oprivilege.privilegeId === privilege.privilegeId,
                         )[0];
                         if (
                           currentPrivilege.granted !== originalPrivilege.granted
@@ -233,7 +235,8 @@ export default function Privileges() {
                           const updatePrivilege =
                             newUpdatePrivilegesBatch.filter(
                               (uprivilege) =>
-                                uprivilege.privilegeId === privilege.privilegeId
+                                uprivilege.privilegeId ===
+                                privilege.privilegeId,
                             )[0];
                           if (updatePrivilege == null) {
                             newUpdatePrivilegesBatch.push(currentPrivilege);
@@ -242,7 +245,8 @@ export default function Privileges() {
                           const updatePrivilege =
                             newUpdatePrivilegesBatch.filter(
                               (uprivilege) =>
-                                uprivilege.privilegeId === privilege.privilegeId
+                                uprivilege.privilegeId ===
+                                privilege.privilegeId,
                             )[0];
                           if (updatePrivilege != null) {
                             const index =
@@ -271,8 +275,8 @@ export default function Privileges() {
                               setCurrentModule(() => module);
                               setCurrentFeature(
                                 features.filter(
-                                  (filter) => filter.module === module.id
-                                )[0]
+                                  (filter) => filter.module === module.id,
+                                )[0],
                               );
                               setAllControl(() => {
                                 return {
@@ -299,7 +303,7 @@ export default function Privileges() {
 
                     const dataGrid = currentPrivileges
                       .filter(
-                        (privilege) => currentFeature?.id === privilege.feature
+                        (privilege) => currentFeature?.id === privilege.feature,
                       )
                       .map((privilege) => {
                         return (
@@ -311,16 +315,13 @@ export default function Privileges() {
                               {privilege.privilegedAction}
                             </td>
                             <td className="text-truncate align-middle">
-                              <div className="form-check form-switch">
+                              <label className="privilege-switch">
                                 <input
-                                  id={`granted-${privilege.privilegeId}`}
-                                  className="form-check-input form-switch-mod privilege-switch"
                                   type="checkbox"
-                                  role="switch"
                                   checked={privilege.granted}
                                   onChange={(event) => {
                                     const newPrivileges = currentPrivileges.map(
-                                      (x) => x
+                                      (x) => x,
                                     );
                                     const index =
                                       currentPrivileges.indexOf(privilege);
@@ -331,31 +332,29 @@ export default function Privileges() {
                                       ...newPrivileges,
                                     ]);
                                     updatePrivilegesBatchLoader(
-                                      privilege.privilegeId
+                                      privilege.privilegeId,
                                     );
                                   }}
                                   disabled={!authorities.update}
                                 />
-                              </div>
+                                <span className="privilege-slider"></span>
+                              </label>
                             </td>
 
-                            <td className="align-middle">
-                              <div className="row">
-                                <div className="col col-2">
-                                  <button
-                                    type="button"
-                                    className="action-btn"
-                                    title="View"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#viewPrivilegesModal"
-                                    disabled={!authorities.view}
-                                    onClick={() => {
-                                      loadModalData(privilege.privilegeId);
-                                    }}
-                                  >
-                                    <i className="fa-sharp fa-solid fa-eye"></i>
-                                  </button>
-                                </div>
+                            <td>
+                              <div className="list-actions">
+                                <button
+                                  type="button"
+                                  className="action-icon view"
+                                  title="View"
+                                  disabled={!authorities.view}
+                                  onClick={() => {
+                                    loadModalData(privilege.privilegeId);
+                                    setIsViewOpen(true);
+                                  }}
+                                >
+                                  <i className="fa-solid fa-eye"></i>
+                                </button>
                               </div>
                             </td>
                           </tr>
@@ -365,7 +364,7 @@ export default function Privileges() {
                     function loadModalData(privilegeId) {
                       setModal(() => {
                         const privilege = objects.filter(
-                          (privilege) => privilege.privilegeId === privilegeId
+                          (privilege) => privilege.privilegeId === privilegeId,
                         );
                         return {
                           ...privilege[0],
@@ -378,7 +377,7 @@ export default function Privileges() {
 
                     function dataGridOffset(dataGrid) {
                       const length = objects.filter(
-                        (privilege) => currentFeature?.id === privilege.feature
+                        (privilege) => currentFeature?.id === privilege.feature,
                       ).length;
                       for (let i = length; i < 5; i++) {
                         dataGrid.push(
@@ -387,8 +386,7 @@ export default function Privileges() {
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>
-                         
-                          </tr>
+                          </tr>,
                         );
                       }
                       return dataGrid;
@@ -397,481 +395,470 @@ export default function Privileges() {
                     const updatePrivilegesModalDataGrid =
                       updatePrivilegesBatch.map((updatePrivilege) => {
                         return (
-                          <tr key={updatePrivilege.privilegeId}>
-                            <td className="text-truncate align-middle">
-                              {
-                                modules.filter(
-                                  (module) =>
-                                    module.id === updatePrivilege.module
-                                )[0].description
-                              }
-                            </td>
-                            <td className="text-truncate align-middle">
-                              {
-                                features.filter(
-                                  (feature) =>
-                                    feature.id === updatePrivilege.feature
-                                )[0].description
-                              }
-                            </td>
-                            <td className="text-truncate align-middle">
-                              {updatePrivilege.privilegedAction}
-                            </td>
-                            <td className="text-truncate align-middle">
-                              {updatePrivilege.granted ? "Yes" : "No"}
-                            </td>
-                          </tr>
+                          <div
+                            key={updatePrivilege.privilegeId}
+                            className="app-section"
+                          >
+                            <div className="app-section__icon icon-blue">
+                              <i className="fa-solid fa-shield-check"></i>
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <p className="app-section__label">
+                                {
+                                  modules.filter(
+                                    (module) =>
+                                      module.id === updatePrivilege.module,
+                                  )[0].description
+                                }{" "}
+                                →{" "}
+                                {
+                                  features.filter(
+                                    (feature) =>
+                                      feature.id === updatePrivilege.feature,
+                                  )[0].description
+                                }
+                              </p>
+                              <p className="app-section__value">
+                                {updatePrivilege.privilegedAction}
+                              </p>
+                            </div>
+                            <div
+                              className={`app-badge ${updatePrivilege.granted ? "app-badge--success" : "app-badge--danger"}`}
+                            >
+                              {updatePrivilege.granted ? "Granted" : "Revoked"}
+                            </div>
+                          </div>
                         );
                       });
                     return (
                       <>
-                        <section>
+                        <section className="secondary-page">
                           <div className="content">
                             <div className="container">
-                              <div className="row pt-3 align-items-center user-content">
-                                <div className="col">
-                                  <h4 className="page-header user-heading">
-                                    User Groups Management | Privileges
-                                  </h4>
-                                  <div className="mt-2 callback-text usergroup-info">
-                                    <h5 className="usergroup-info-text">
+                              <div className="page-card">
+                                <div className="list-header">
+                                  <div>
+                                    <h2 className="list-title">
+                                      User Groups Management | Privileges
+                                    </h2>
+                                    <p className="list-subtitle">
+                                      User Group:{" "}
                                       <span className="fw-bold">
-                                        User Group:{" "}
-                                      </span>
-                                      {userGroupDto.userGroupDescription} (
-                                      {userGroupDto.userGroupId})
-                                    </h5>
+                                        {userGroupDto.userGroupDescription}
+                                      </span>{" "}
+                                      ({userGroupDto.userGroupId})
+                                    </p>
                                   </div>
-                                </div>
-                              </div>
-                              <div className="row table-row mb-3">
-                                <div className="col col-1 d-flex p-0">
                                   <Link
-                                    to={`../../usergroups${
-                                      state?.search || ""
-                                    }`}
-                                    className="btn btn-theme-outline btn-sm text-nowrap"
+                                    to={`../../usergroups${state?.search || ""}`}
+                                    className="page-btn"
                                   >
-                                    &nbsp;&nbsp;
                                     <i className="fa-solid fa-circle-arrow-left"></i>
-                                    &nbsp;&nbsp;&nbsp;Back&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;Back
                                   </Link>
                                 </div>
-                              </div>
-                              <div className="row table-row mb-3">
-                                <div className="col table-responsive bg-theme-1 border rounded table-container">
-                                  <ul className="nav nav-tabs folder rounded-top">
-                                    {moduleTabs}
-                                    <div className="col text-end add-btn pe-2">
+
+                                {/* Tabs + Update button */}
+                                <div className="priv-tabs-wrap">
+                                  <div className="priv-tabs">
+                                    {modules.map((module) => (
                                       <button
+                                        key={module.id}
+                                        id={`moduleTab-${module.id}`}
                                         type="button"
-                                        className="btn btn-theme btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#updatePrivilegesModal"
-                                        disabled={
-                                          authorities.update
-                                            ? updatePrivilegesBatch.length === 0
-                                            : true
-                                        }
-                                      >
-                                        &nbsp;
-                                        <i className="fa-sharp fa-solid fa-circle-arrow-up"></i>
-                                        &nbsp;&nbsp;Update&nbsp;Privileges&nbsp;(
-                                        {updatePrivilegesBatch.length}
-                                        )&nbsp;&nbsp;
-                                      </button>
-                                    </div>
-                                  </ul>
-                                  <div className="row px-3 pt-3 folder-settings align-items-center">
-                                    <div className="col col-2 search-by-col-2 d-flex align-items-center">
-                                      <label className="fw-bold">
-                                        Feature:&nbsp;&nbsp;
-                                      </label>
-                                      <select
-                                        name="features"
-                                        className="form-select form-select-sm form-select-mod"
-                                        value={currentFeature?.id}
-                                        onChange={(event) => {
+                                        className={`priv-tab ${currentModule?.id === module.id ? "active" : ""}`}
+                                        onClick={() => {
+                                          setCurrentModule(() => module);
                                           setCurrentFeature(
-                                            () =>
-                                              features.filter(
-                                                (feature) =>
-                                                  feature.id ===
-                                                  event.target.value
-                                              )[0]
+                                            features.filter(
+                                              (filter) =>
+                                                filter.module === module.id,
+                                            )[0],
                                           );
-                                          setAllControl(() => {
-                                            return {
-                                              granted: false,
-                                            };
-                                          });
+                                          setAllControl({ granted: false });
                                         }}
                                       >
-                                        {featuresDropDown}
-                                      </select>
-                                    </div>
-                                    <div className="col">
-                                      <div className="row justify-content-end align-items-center">
-                                        <div className="col col-1 search-by-col-1 d-flex">
-                                          <label className="fw-bold">
-                                            Grant All:&nbsp;&nbsp;
-                                          </label>
-                                          <div className="col col-1 search-by-col-1 d-flex">
-                                            <label className="fw-bold">
-                                              Grant All:&nbsp;&nbsp;
-                                            </label>
-                                            <div className="form-check form-switch">
-                                              <input
-                                                id="granted-all"
-                                                className="form-check-input form-switch-mod yellow-switch"
-                                                type="checkbox"
-                                                role="switch"
-                                                checked={allControl.granted}
-                                                onChange={(event) => {
-                                                  const allPrivileges =
-                                                    currentPrivileges.filter(
-                                                      (privilege) =>
-                                                        privilege.feature ===
-                                                        currentFeature?.id
-                                                    );
-                                                  const newPrivileges =
-                                                    currentPrivileges.map(
-                                                      (x) => x
-                                                    );
-                                                  allPrivileges?.map(
-                                                    (privilege) => {
-                                                      const index =
-                                                        currentPrivileges.indexOf(
-                                                          privilege
-                                                        );
-                                                      newPrivileges[
-                                                        index
-                                                      ].granted =
-                                                        event.target.checked;
-                                                    }
-                                                  );
-                                                  setCurrentPrivileges(() => {
-                                                    return [...newPrivileges];
-                                                  });
-                                                  updatePrivilegesBatchLoaderFromArray(
-                                                    allPrivileges
-                                                  );
-                                                  setAllControl({
-                                                    granted:
-                                                      event.target.checked,
-                                                  });
-                                                }}
-                                              />
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
+                                        {module.description}
+                                      </button>
+                                    ))}
                                   </div>
-                                  <div className="folder-content">
-                                    <table className="table table-hover">
-                                      <thead>
-                                        <tr>
-                                          <th>
-                                            <div className="row table-heading align-items-center">
-                                              <div className="col table-heading-title">
-                                                Privilege&nbsp;ID
-                                              </div>
-                                            </div>
-                                          </th>
-                                          <th>
-                                            <div className="row table-heading align-items-center">
-                                              <div className="col table-heading-title">
-                                                Privileged&nbsp;Action
-                                              </div>
-                                            </div>
-                                          </th>
-                                          <th>
-                                            <div className="row table-heading align-items-center">
-                                              Granted
-                                            </div>
-                                          </th>
-                                          <th>Action</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>{dataGridOffset(dataGrid)}</tbody>
-                                    </table>
+                                  <button
+                                    type="button"
+                                    className="list-add-btn priv-update-btn"
+                                    onClick={() => setIsUpdateOpen(true)}
+                                    disabled={
+                                      !authorities.update ||
+                                      updatePrivilegesBatch.length === 0
+                                    }
+                                  >
+                                    <i className="fa-solid fa-rotate-right"></i>
+                                    Update Privileges (
+                                    {updatePrivilegesBatch.length})
+                                  </button>
+                                </div>
+
+                                {/* Controls */}
+                                <div className="list-controls priv-controls">
+                                  <div className="list-search-field">
+                                    <label
+                                      className="list-label"
+                                      htmlFor="features"
+                                    >
+                                      Feature:
+                                    </label>
+                                    <select
+                                      id="features"
+                                      name="features"
+                                      className="list-select"
+                                      value={currentFeature?.id}
+                                      onChange={(event) => {
+                                        setCurrentFeature(
+                                          () =>
+                                            features.filter(
+                                              (feature) =>
+                                                feature.id ===
+                                                event.target.value,
+                                            )[0],
+                                        );
+                                        setAllControl({ granted: false });
+                                      }}
+                                    >
+                                      {featuresDropDown}
+                                    </select>
                                   </div>
+
+                                  <div className="list-search-field">
+                                    <label
+                                      className="list-label"
+                                      htmlFor="granted-all"
+                                    >
+                                      Grant All:
+                                    </label>
+                                    <label className="privilege-switch">
+                                      <input
+                                        id="granted-all"
+                                        type="checkbox"
+                                        checked={allControl.granted}
+                                        onChange={(event) => {
+                                          const allPrivileges =
+                                            currentPrivileges.filter(
+                                              (privilege) =>
+                                                privilege.feature ===
+                                                currentFeature?.id,
+                                            );
+                                          const newPrivileges =
+                                            currentPrivileges.map((x) => x);
+                                          allPrivileges?.forEach(
+                                            (privilege) => {
+                                              const index =
+                                                currentPrivileges.indexOf(
+                                                  privilege,
+                                                );
+                                              newPrivileges[index].granted =
+                                                event.target.checked;
+                                            },
+                                          );
+                                          setCurrentPrivileges(() => {
+                                            return [...newPrivileges];
+                                          });
+                                          updatePrivilegesBatchLoaderFromArray(
+                                            allPrivileges,
+                                          );
+                                          setAllControl({
+                                            granted: event.target.checked,
+                                          });
+                                        }}
+                                      />
+                                      <span className="privilege-slider"></span>
+                                    </label>
+                                  </div>
+                                </div>
+
+                                {/* Table */}
+                                <div className="list-table-wrap">
+                                  <table className="list-table">
+                                    <thead>
+                                      <tr>
+                                        <th>Privilege ID</th>
+                                        <th>Privileged Action</th>
+                                        <th>Granted</th>
+                                        <th>Action</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>{dataGridOffset(dataGrid)}</tbody>
+                                  </table>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </section>
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="updatePrivilegesModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
-                                <div>
-                                  <h4 className="page-header">
-                                    Privileges | Confirm Update
-                                  </h4>
-                                  <div className="mt-4 callback-text">
-                                    <h5>
-                                      <span className="fw-bold">
-                                        User Group ID:{" "}
-                                      </span>
-                                      {userGroupDto.userGroupId}
-                                    </h5>
-                                    <h5>
-                                      <span className="fw-bold">
-                                        User Group Name:{" "}
-                                      </span>
-                                      {userGroupDto.userGroupDescription}
-                                    </h5>
-                                  </div>
-                                </div>
 
+                        {/* Update Modal with new styling */}
+                        {isUpdateOpen && (
+                          <div
+                            className="app-dialog-overlay"
+                            role="dialog"
+                            aria-modal="true"
+                          >
+                            <div
+                              className="app-dialog app-dialog--lg"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="app-dialog__header">
+                                <div>
+                                  <h2 className="app-dialog__title">
+                                    Confirm Privilege Updates
+                                  </h2>
+                                  <p className="app-dialog__subtitle">
+                                    User Group:{" "}
+                                    {userGroupDto.userGroupDescription} (
+                                    {userGroupDto.userGroupId})
+                                  </p>
+                                </div>
                                 <button
                                   type="button"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
+                                  className="app-dialog__close"
                                   aria-label="Close"
-                                  id="updatePrivilegesModalClose"
+                                  onClick={() => setIsUpdateOpen(false)}
                                   disabled={navigation.state === "submitting"}
-                                ></button>
+                                >
+                                  <i className="fa-solid fa-xmark"></i>
+                                </button>
                               </div>
-                              <div className="modal-body">
-                                <table className="table table-hover">
-                                  <thead>
-                                    <tr>
-                                      <th>
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Module
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Feature
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <th>
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Privileged&nbsp;Action
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <th className="granted-text">Granted</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>{updatePrivilegesModalDataGrid}</tbody>
-                                </table>
-                              </div>
-                              <div className="modal-footer">
-                                <div className="col text-end add-btn pe-2">
-                                  <Form method="post">
+
+                              <div className="app-dialog__body">
+                                <Form
+                                  id="updatePrivilegesForm"
+                                  method="post"
+                                  className="app-form"
+                                >
+                                  {updatePrivilegesModalDataGrid}
+
+                                  <input
+                                    type="hidden"
+                                    name="userGroupId"
+                                    value={userGroupDto.userGroupId}
+                                    readOnly={true}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="batchNo"
+                                    value={userGroupDto.batchNo}
+                                    readOnly={true}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="formType"
+                                    value="updatePrivileges"
+                                    readOnly={true}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="privileges"
+                                    value={stringifyUpdatePrivilegesBatch()}
+                                    readOnly={true}
+                                  />
+
+                                  <div className="app-actions">
                                     <button
-                                      type="submit"
-                                      className="btn btn-theme btn-sm"
+                                      type="button"
+                                      className="app-dialog__close-btn"
+                                      onClick={() => setIsUpdateOpen(false)}
                                       disabled={
                                         navigation.state === "submitting"
                                       }
                                     >
-                                      &nbsp;
-                                      <i className="fa-sharp fa-solid fa-circle-arrow-up"></i>
-                                      &nbsp;&nbsp;{" "}
+                                      Cancel
+                                    </button>
+
+                                    <button
+                                      type="submit"
+                                      className="app-btn app-btn--primary"
+                                      disabled={
+                                        navigation.state === "submitting" ||
+                                        updatePrivilegesBatch.length === 0
+                                      }
+                                    >
+                                      <i
+                                        className="fa-solid fa-rotate-right"
+                                        style={{ marginRight: 6 }}
+                                      ></i>
                                       {navigation.state === "submitting"
                                         ? "Submitting..."
                                         : "Update Privileges"}
-                                      &nbsp;&nbsp;&nbsp;
                                     </button>
-                                    <input
-                                      type="hidden"
-                                      name="userGroupId"
-                                      value={userGroupDto.userGroupId}
-                                      readOnly={true}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="batchNo"
-                                      value={userGroupDto.batchNo}
-                                      readOnly={true}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="formType"
-                                      value="updatePrivileges"
-                                      readOnly={true}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="privileges"
-                                      value={stringifyUpdatePrivilegesBatch()}
-                                      readOnly={true}
-                                    />
-                                  </Form>
-                                </div>
+                                  </div>
+                                </Form>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          className="modal modal-adjuster fade"
-                          id="viewPrivilegesModal"
-                          data-bs-backdrop="static"
-                          data-bs-keyboard="false"
-                          tabIndex="-1"
-                          aria-hidden="true"
-                        >
-                          <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div className="modal-content">
-                              <div className="modal-header align-items-start">
+                        )}
+
+                        {/* View Modal */}
+                        {isViewOpen && (
+                          <div
+                            className="app-dialog-overlay"
+                            role="dialog"
+                            aria-modal="true"
+                          >
+                            <div
+                              className="app-dialog"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="app-dialog__header">
                                 <div>
-                                  <h4 className="page-header">
+                                  <h4 className="app-dialog__title">
                                     Privileges | View
                                   </h4>
+                                  <p className="app-dialog__subtitle">
+                                    Review privilege details
+                                  </p>
                                 </div>
                                 <button
                                   type="button"
-                                  className="btn-close"
-                                  data-bs-dismiss="modal"
+                                  className="app-dialog__close"
                                   aria-label="Close"
-                                ></button>
+                                  onClick={() => setIsViewOpen(false)}
+                                >
+                                  <i className="fa-solid fa-xmark"></i>
+                                </button>
                               </div>
-                              <div className="modal-body">
-                                <table className="table table-hover">
-                                  <tbody>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Privilege ID
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.privilegeId}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Module
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {
-                                          modules.filter(
-                                            (module) =>
-                                              module.id === modal.module
-                                          )[0]?.description
-                                        }
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Feature
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {
-                                          features.filter(
-                                            (feature) =>
-                                              feature.id === modal.feature
-                                          )[0]?.description
-                                        }
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Privileged Action
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.privilegedAction}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Granted
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.granted ? "Yes" : "No"}
-                                      </td>
-                                    </tr>
+                              <div className="app-dialog__body">
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-blue">
+                                    <i className="fa-solid fa-id-badge"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Privilege ID
+                                    </p>
+                                    <p className="app-section__value">
+                                      {modal.privilegeId}
+                                    </p>
+                                  </div>
+                                </div>
 
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.created}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Created By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.createdBy}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last Modified Date
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModified}
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                      <th scope="row">
-                                        <div className="row table-heading align-items-center">
-                                          <div className="col table-heading-title">
-                                            Last modified By
-                                          </div>
-                                        </div>
-                                      </th>
-                                      <td className="text-truncate align-middle">
-                                        {modal.lastModifiedBy}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-purple">
+                                    <i className="fa-solid fa-layer-group"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">Module</p>
+                                    <p className="app-section__value">
+                                      {
+                                        modules.filter(
+                                          (m) => m.id === modal.module,
+                                        )[0]?.description
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-green">
+                                    <i className="fa-solid fa-puzzle-piece"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Feature
+                                    </p>
+                                    <p className="app-section__value">
+                                      {
+                                        features.filter(
+                                          (f) => f.id === modal.feature,
+                                        )[0]?.description
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-amber">
+                                    <i className="fa-solid fa-shield-check"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Privileged Action
+                                    </p>
+                                    <p className="app-section__value">
+                                      {modal.privilegedAction}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-blue">
+                                    <i className="fa-solid fa-toggle-on"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Granted
+                                    </p>
+                                    <p className="app-section__value">
+                                      {modal.granted ? "Yes" : "No"}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-purple">
+                                    <i className="fa-solid fa-clock"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Created
+                                    </p>
+                                    <p className="app-section__value">
+                                      {modal.created}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-green">
+                                    <i className="fa-solid fa-user"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Created By
+                                    </p>
+                                    <p className="app-section__value app-section__value--break">
+                                      {modal.createdBy}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-amber">
+                                    <i className="fa-solid fa-pen"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Last Modified
+                                    </p>
+                                    <p className="app-section__value">
+                                      {modal.lastModified}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="app-section">
+                                  <div className="app-section__icon icon-blue">
+                                    <i className="fa-solid fa-user-gear"></i>
+                                  </div>
+                                  <div>
+                                    <p className="app-section__label">
+                                      Last Modified By
+                                    </p>
+                                    <p className="app-section__value app-section__value--break">
+                                      {modal.lastModifiedBy}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        )}
                         <div className="toast-container toast-positioner">
                           {toasts}
                         </div>
