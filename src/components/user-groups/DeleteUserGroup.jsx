@@ -106,12 +106,12 @@ export default function DeleteUserGroup({
 
           <div className="app-section">
             <div className="app-section__icon icon-green">
-              <Mail size={18} />
+              <Clock size={18} />
             </div>
             <div className="user-section__content">
               <p className="app-section__label">Access Duration</p>
               <p className="app-section__value app-section__value--break">
-                {data.accessDuration}
+                {data.accessDuration}&#160;minutes
               </p>
             </div>
           </div>
