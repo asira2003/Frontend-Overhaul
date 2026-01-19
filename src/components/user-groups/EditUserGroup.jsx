@@ -56,7 +56,7 @@ export default function EditUserGroup({
 
               <input
                 type="text"
-                id="adduserGroupDescription"
+                id="edituserGroupDescription"
                 name="userGroupDescription"
                 className="app-input"
                 disabled={submitting}
@@ -70,16 +70,20 @@ export default function EditUserGroup({
                 placeholder="Enter user group name"
               />
 
-              {errors?.add?.adduserGroupDescriptionError?.length > 0 && (
-                <div className="app-error">
-                  {errors.add.adduserGroupDescriptionError[0].message}
-                </div>
-              )}
+              {errors.edit.edituserGroupDescriptionError &&
+                errors.edit.edituserGroupDescriptionError.length > 0 && (
+                  <div className="app-error">
+                    {errors.edit.edituserGroupDescriptionError[0].message}
+                  </div>
+                )}
             </div>
 
             {/* Access Duration */}
             <div className="app-field">
-              <label htmlFor="adduserGroupAccessDuration" className="app-label">
+              <label
+                htmlFor="edituserGroupAccessDuration"
+                className="app-label"
+              >
                 <Clock size={16} />
                 <span>Access Duration (minutes)</span>
               </label>
@@ -89,7 +93,7 @@ export default function EditUserGroup({
                   type="number"
                   min="0"
                   step="1"
-                  id="adduserGroupAccessDuration"
+                  id="edituserGroupAccessDuration"
                   name="accessDuration"
                   className="app-input"
                   disabled={submitting}
@@ -104,12 +108,12 @@ export default function EditUserGroup({
                 />
                 <span className="app-input-addon">minutes</span>
               </div>
-
-              {errors?.add?.addAccessDurationError?.length > 0 && (
-                <div className="app-error">
-                  {errors.add.addAccessDurationError[0].message}
-                </div>
-              )}
+              {errors.edit.editAccessDurationError &&
+                errors.edit.editAccessDurationError.length > 0 && (
+                  <div className="text-danger">
+                    {errors.edit.editAccessDurationError[0].message}
+                  </div>
+                )}
               <div className="app-helper">
                 Controls session timeout for members of this group.
               </div>
