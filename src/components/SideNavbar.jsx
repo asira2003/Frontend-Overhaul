@@ -13,7 +13,7 @@ export default function SideNavbar({
   const modules = JSON.parse(sessionStorage.getItem("modules") || "[]");
   const features = JSON.parse(sessionStorage.getItem("features") || "[]");
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [adminOpen, setAdminOpen] = useState(
     activeModuleParam === "administration",
   );
@@ -97,7 +97,14 @@ export default function SideNavbar({
               <div className="sidebar-group">
                 <button
                   className={`sidebar-group-toggle ${adminOpen ? "open" : ""}`}
-                  onClick={() => setAdminOpen((v) => !v)}
+                  onClick={() => {
+                    if (collapsed) {
+                      setCollapsed(false);
+                      setAdminOpen(true);
+                    } else {
+                      setAdminOpen((v) => !v);
+                    }
+                  }}
                   data-tooltip="Administration"
                 >
                   <i className="fa-solid fa-users-gear"></i>
@@ -111,9 +118,15 @@ export default function SideNavbar({
                 >
                   {features.includes("PE-1") && (
                     <Link
-                      to="/users"
-                      className={`sidebar-subitem ${activeFeature === "users" ? "active" : ""}`}
-                      onClick={() => toggleNavState("administration", "users")}
+                      to="/"
+                      className={`sidebar-subitem ${activeFeature === "/" ? "active" : ""}`}
+                      onClick={() => {
+                        if (collapsed) {
+                          setCollapsed(false);
+                        } else {
+                          toggleNavState("administration", "/");
+                        }
+                      }}
                       data-tooltip="Users"
                     >
                       <i className="fa-solid fa-user"></i>
@@ -124,9 +137,13 @@ export default function SideNavbar({
                     <Link
                       to="/usergroups"
                       className={`sidebar-subitem ${activeFeature === "usergroups" ? "active" : ""}`}
-                      onClick={() =>
-                        toggleNavState("administration", "usergroups")
-                      }
+                      onClick={() => {
+                        if (collapsed) {
+                          setCollapsed(false);
+                        } else {
+                          toggleNavState("administration", "usergroups");
+                        }
+                      }}
                       data-tooltip="User Groups"
                     >
                       <i className="fa-solid fa-user-group"></i>
